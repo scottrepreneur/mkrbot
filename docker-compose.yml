@@ -5,25 +5,31 @@ services:
       context: ./api
       dockerfile: Dockerfile
     restart: always
+    env_file: .env
+    # volumes:
+    #   - '.:/api'
     ports:
-     - "5001:5001"
+     - "5000:5000"
     depends_on:
       - redis
   worker:
     build:
       context: celery-queue
       dockerfile: Dockerfile
+    env_file: .env
+    # volumes:
+    #   - '.:/queue'
     depends_on:
       - redis
-  monitor:
-    build:
-      context: celery-queue
-      dockerfile: Dockerfile
-    ports:
-     - "5555:5555"
-    entrypoint: flower
-    command:  -A tasks --port=5555 --broker=redis://redis:6379/0
-    depends_on:
-      - redis
+  # monitor:
+  #   build:
+  #     context: celery-queue
+  #     dockerfile: Dockerfile
+  #   ports:
+  #    - "5555:5555"
+  #   entrypoint: flower
+  #   command:  -A tasks --port=5555 --broker=redis://redis:6379/0
+  #   depends_on:
+  #     - redis
   redis:
     image: redis

@@ -1,4 +1,4 @@
-name: Docker Flask Celery Redis
+name: MkrBot
 
 on: [push]
 

@@ -1,11 +1,16 @@
-# Docker Flask Celery Redis
+# Maker Bot
 
-A basic [Docker Compose](https://docs.docker.com/compose/) template for orchestrating a [Flask](http://flask.pocoo.org/) application & a [Celery](http://www.celeryproject.org/) queue with [Redis](https://redis.io/)
+A RocketChat bot for MKR holders and Dai users.
+
+- [Docker Compose](https://docs.docker.com/compose/)
+- [Flask](http://flask.pocoo.org/) 
+- [Celery](http://www.celeryproject.org/) 
+- [Redis](https://redis.io/)
 
 ### Installation
 
 ```bash
-git clone https://github.com/mattkohl/docker-flask-celery-redis
+git clone https://github.com/scottrepreneur/mkr-bot
 ```
 
 ### Build & Launch

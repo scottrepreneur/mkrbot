@@ -6,6 +6,9 @@ ENV C_FORCE_ROOT true
 
 COPY . /queue
 WORKDIR /queue
+# COPY requirements.txt .
+
+RUN apk add build-base
 
 RUN pip install -r requirements.txt
 
