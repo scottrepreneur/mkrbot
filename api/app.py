@@ -1,5 +1,6 @@
 import os
 import json
+from datetime import datetime
 from flask import Flask, request, jsonify
 from flask import url_for
 from worker import celery
@@ -29,7 +30,6 @@ def maker_chat():
 	if request.method == 'GET':
 		verify_token = request.args.get('verify_token')
 		if verify_token == MKRBOT_TOKEN:
-			authorised_clients[request.remote_addr] = datetime.now()
 			return jsonify({'status':'success'}), 200
 		else:
 			return jsonify({'status':'bad token'}), 401
@@ -37,9 +37,15 @@ def maker_chat():
 	elif request.method == 'POST':
 
 		verify_token = request.headers.get('verify_token')
-		if verify_token == MKRBOT_TOKEN:
+		if verify_token != MKRBOT_TOKEN:
+			return jsonify({'status':'not authorised'}), 401
+			
+		else:
 			# print(request.data)
-			if request.data:
+			if request.data is None:
+				return jsonify({'status':'no data in webhook'}), 400
+			
+			else:
 				data = json.loads(request.data)
 				print(data)
 				user = data['user']
@@ -50,12 +56,6 @@ def maker_chat():
 				# message = process_message.delay(user, message, channel)
 
 				return jsonify({'status':'success'}), 200
-			
-			else:
-				return jsonify({'status':'no data in webhook'}), 400
-
-		else:
-			return jsonify({'status':'not authorised'}), 401
 
 	else:
-		return jsonify({'status':'success'}), 400
+		return jsonify({'status':'try GET or POST'}), 400

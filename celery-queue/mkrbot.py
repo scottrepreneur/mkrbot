@@ -14,7 +14,8 @@ mkrbot_triggers = {
 		'@mkr.bot',
 		'@mkrbot',
         'mkr.bot',
-		'mkrbot'
+		'mkrbot',
+        'bot'
 	],
 	'spell_count': [
 		'spell count',

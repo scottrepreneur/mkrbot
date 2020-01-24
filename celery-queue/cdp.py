@@ -19,6 +19,7 @@ def get_cdp_by_id(message):
     get_cdp_query = "{ getCup(id: " + str(cdp) + ") {art,block,deleted,id,ink,ire,lad,pip,ratio,tab,time,actions {nodes {act,arg,time,pip}}}}"
     response = requests.post(MAKER_GRAPH_URL, json={'query': get_cdp_query})
     cup = response.json()['data']['getCup']
+    print(cup)
     
     # id and 
     cdp_string = '```CDP ID: {id} | Collateralization Ratio: {ratio}\n'.format(
@@ -35,7 +36,9 @@ def get_cdp_by_id(message):
     
     # add last action
     for action in cup['actions']['nodes']:
-        date = datetime.strptime(action['time'], '%Y-%m-%dT%H:%M:%S%z').strftime('%b %d, %Y at %H:%M%p %Z')
+        if ":" == action['time'][-3:-2]:
+            action['time'] = action['time'][:-3] + action['time'][-2:]
+        date = datetime.strptime(action['time'], '%Y-%m-%dT%H:%M:%S+%z').strftime('%b %d, %Y at %H:%M%p %Z')
         if action['act'] == 'SHUT' or action['act'] == 'OPEN':
             cdp_string = cdp_string + 'Last Action: {action_name} at {time}\n'.format(
                 action_name=action['act'].capitalize(),
