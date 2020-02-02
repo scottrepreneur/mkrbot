@@ -6,8 +6,22 @@ from check_hat import check_spells
 from cdp import get_cdp_by_id
 
 MAKER_COMMUNITY_PORTAL = os.getenv('MAKER_COMMUNITY_PORTAL')
+MKRBOT_GUIDE_URL = "https://community-development.makerdao.com/faqs/mkrbot-guide"
+CONTRIBUTING_URL = "https://www.github.com/scottrepreneur/mkrbot/CONTRIBUTING"
+CREATOR_DM_URL = "https://chat.makerdao.com/direct/scottrepreneur"
+
 
 # TODO Add MKR Burn makerburn.com
+# Update SCD -> MCD FAQs
+# TODO Update check spells command to use jernjml's version/ updating
+# TODO Integrate Governance CMS API
+# Update Help Command
+# TODO add oracle price feeds
+# TODO add glossary command
+
+# TODO capitalization doesn't matter in commands
+# TODO better IA?
+
 
 mkrbot_triggers = {
 	'names': [
@@ -18,12 +32,14 @@ mkrbot_triggers = {
         'bot'
 	],
 	'spell_count': [
+        'spell',
+        'spells',
 		'spell count',
         'spells count',
 		'chief spells',
 		'chief spells count',
 		'chief spell count',
-		'What is the spell count',
+		'what is the spell count',
 		'mkr on spells',
         'mkr on spell',
 		'mkr per spells',
@@ -42,12 +58,6 @@ mkrbot_triggers = {
             'what is a cdp',
             'what is cdp',
             'what is a cdp?',
-            'faqs vaults',
-            'faq vaults',
-            'vault faqs',
-            'vault faq',
-            'what is a vault',
-            'what is a vault?'
         ],
         'dai': [
             'faqs dai',
@@ -56,6 +66,14 @@ mkrbot_triggers = {
             'dai faq',
             'what is dai',
             'what is dai?'
+        ],
+        'dsr': [
+            'faqs dsr',
+            'faq dsr',
+            'dsr faqs',
+            'dsr faq',
+            'what is the dsr',
+            'what is the dsr?'
         ],
         'emergency_shutdown': [
             'faqs shutdown',
@@ -66,6 +84,12 @@ mkrbot_triggers = {
             'emergency shutdown faq',
             'what is emergency shutdown',
             'what is emergency shutdown?'
+        ],
+        'glossary': [
+            'glossary',
+            'terms',
+            'faq glossary',
+            'faq terms'
         ],
         'governance': [
             'faqs governance',
@@ -136,15 +160,59 @@ mkrbot_triggers = {
             'stability fee faq',
             'what is the stability fee',
             'what is the stability fee?'
+        ],
+        'vault': [
+            'faqs vaults',
+            'faq vaults',
+            'vault faqs',
+            'vault faq',
+            'what is a vault',
+            'what is a vault?'
+        ],
+        'faqs_overview': [
+            'faq',
+            'faqs',
+            'faqs list',
+            'faqs overview',
+            'faqs help',
+            'faq list',
+            'faq overview',
+            'faq help'
         ]
     },
     'resources': {
+        'dev_docs': [
+            'docs',
+            'dev docs',
+            'documentation',
+            'developer documentation',
+            'developer docs'
+        ],
         'cdp_portal': [
+            'portal',
             'cdp portal',
             'cdps portal',
             'portal cdp'
         ],
+        'oasis_app': [
+            'oasis',
+            'vault portal',
+            'vaults portal',
+            'portal vault',
+            'portal vaults'
+        ],
+        'oasis_save': [
+            'oasis save',
+            'save'
+        ],
+        'oasis_trade': [
+            'oasis trade',
+            'trade'
+        ],
         'governance_dashboard': [
+            'governance',
+            'gov',
+            'vote',
             'gov dashboard',
             'governance dashboard',
             'governance portal',
@@ -224,6 +292,7 @@ mkrbot_triggers = {
             'awesome developer',
             'awesome developer resources',
             'awesome developer resource',
+            'amd dev',
             'amd dev resources',
             'amd developer',
             'amd developer resources'
@@ -234,26 +303,50 @@ mkrbot_triggers = {
             'amd audit',
             'amd audits'
         ],
+        'awesome_overview': [
+            'amd list',
+            'amd overview',
+            'amd help'
+        ]
     }
 }
 
 language_code = '/en'
-faqs_url = '/faqs'
+faqs_url = '/makerdao-mcd-faqs/faqs'
 mkrbot_responses = {
     'faqs': {
-        'cdp': MAKER_COMMUNITY_PORTAL + language_code + faqs_url + '/cdp',
-        'dai': MAKER_COMMUNITY_PORTAL + language_code + faqs_url + '/dai',
-        'emergency_shutdown': MAKER_COMMUNITY_PORTAL + language_code + faqs_url + '/emergency-shutdown',
-        'governance': MAKER_COMMUNITY_PORTAL + language_code + faqs_url + '/governance',
-        'keepers': MAKER_COMMUNITY_PORTAL + language_code + faqs_url + '/keepers',
-        'liquidation': MAKER_COMMUNITY_PORTAL + language_code + faqs_url + '/liquidation',
-        'makerdao': MAKER_COMMUNITY_PORTAL + language_code + faqs_url + '/makerdao',
-        'oracles': MAKER_COMMUNITY_PORTAL + language_code + faqs_url + '/oracles',
-        'risk_management': MAKER_COMMUNITY_PORTAL + language_code + faqs_url + '/risk-management',
-        'stability_fee': MAKER_COMMUNITY_PORTAL + language_code + faqs_url + '/stability-fee',
+        'cdp': 'Heads up! CDPs are called Vaults in Multi-Collateral Dai\nhttps://community-development.makerdao.com/makerdao-mcd-faqs/faqs/vault',
+        'dai': MAKER_COMMUNITY_PORTAL + faqs_url + '/dai',
+        'dsr': MAKER_COMMUNITY_PORTAL + faqs_url + '/dsr',
+        'emergency_shutdown': MAKER_COMMUNITY_PORTAL + faqs_url + '/emergency-shutdown',
+        'governance': MAKER_COMMUNITY_PORTAL + '/makerdao-scd-faqs/scd-faqs' + '/governance',
+        'glossary': MAKER_COMMUNITY_PORTAL + faqs_url + '/glossary',
+        'keepers': MAKER_COMMUNITY_PORTAL + '/makerdao-scd-faqs/scd-faqs' + '/keepers',
+        'liquidation': MAKER_COMMUNITY_PORTAL + faqs_url + '/liquidation',
+        'makerdao': MAKER_COMMUNITY_PORTAL + faqs_url + '/makerdao',
+        'oracles': MAKER_COMMUNITY_PORTAL + faqs_url + '/oracles',
+        'risk_management': MAKER_COMMUNITY_PORTAL + '/makerdao-scd-faqs/scd-faqs' + '/risk-management',
+        'stability_fee': MAKER_COMMUNITY_PORTAL + faqs_url + '/stability-fee',
+        'vault': MAKER_COMMUNITY_PORTAL + faqs_url + '/vault',
+        'faqs_overview': '''
+Here's all the [FAQs](https://community-development.makerdao.com/makerdao-mcd-faqs/faqs) you can request
+> We've got a glossary:  `glossary`
+> Dai: `dai faq`
+> Dai Savings Rate: `dsr faq`
+> Emergency Shutdown: `shutdown faq`
+> Governance: `governance faq`
+> Liquidation: `liquidation faq`
+> MakerDAO: `maker faq`
+> Oracles: `oracle faq`
+> Risk: `risk faq`
+> Stability Fee: `stability fee faq`'''
     },
     'resources': {
-        'cdp_portal': 'https://cdp.makerdao.com',
+        'dev_docs': 'https://developer.makerdao.com',
+        'cdp_portal': 'Heads Up! CDPs are now called Vaults and the portal has moved to Oasis\nhttps://oasis.app/',
+        'oasis_app': 'https://oasis.app/borrow',
+        'oasis_save': 'https://oasis.app/save',
+        'oasis_trade': 'https://oasis.app/trade',
         'governance_dashboard': 'https://vote.makerdao.com',
         'awesome_makerdao': 'https://awesome.makerdao.com',
         'awesome_channels': 'https://awesome.makerdao.com#official-channels',
@@ -265,12 +358,41 @@ mkrbot_responses = {
         'awesome_trade_dai': 'https://awesome.makerdao.com#trade-your-dai',
         'awesome_dev_resoures': 'https://awesome.makerdao.com#developer-resources',
         'awesome_audits_security': 'https://awesome.makerdao.com#audits-and-security',
+        'awesome_overview': '''
+Here are the [AMD](https://awesome.makerdao.com) Resources you can request
+> Official Channels: `amd channels`
+> Spend Dai: `amd spend`
+> Use Dai: `amd use`
+> Lend Dai: `amd lend`
+> Watch Dai: `amd watch`
+> Hold Dai: `amd hodl`
+> Trade Dai: `amd trade`
+> Developer Resources: `amd dev`
+> Audits & Security: `amd audit`
+        '''
     },
-    'help': '''Commands Available:
-        FAQs: `faqs {governance}`
-        Spells Count: `spells count`
-        CDP Lookup: `cdp {ID}`
-        Awesome MakerDAO `amd {section}`'''
+    'help': '''
+Hey, I'm @mkr.bot. I can help you find resources or information about the Maker Protocol.
+> *Commands*
+> FAQs: `faqs {{governance | vaults | dai | stability fee}}`
+> Spells Count: `spells count`
+> Vault Lookup: `vault {{ID}}`
+> Awesome MakerDAO: `amd {{use | lend dai | spend | watch dai}}`
+[mkr.bot Guide]({mkrbot_guide}) | [Expand my commands!]({contributing_link}) | Let [@scottrepreneur]({creator_dm}) know if you have any issues'''.format(
+    mkrbot_guide=MKRBOT_GUIDE_URL,
+    contributing_link=CONTRIBUTING_URL,
+    creator_dm=CREATOR_DM_URL),
+    'no_commands': '''
+I didn\'t get you. Let me look up those Maker resources for you.
+> *Commands*
+> FAQs: `faqs {{governance | vaults | dai | stability fee}}`
+> Spells Count: `spells count`
+> Vault Lookup: `vault {{ID}}`
+> Awesome MakerDAO: `amd {{use | lend dai | spend | watch dai}}`
+[mkr.bot Guide]({mkrbot_guide}) | [Expand my commands!]({contributing_link}) | Let [@scottrepreneur]({creator_dm}) know if you have any issues'''.format(
+    mkrbot_guide=MKRBOT_GUIDE_URL,
+    contributing_link=CONTRIBUTING_URL,
+    creator_dm=CREATOR_DM_URL)
 }
 
 def mkrbot_message(user, message, channel):
@@ -278,67 +400,88 @@ def mkrbot_message(user, message, channel):
 
     #* fetch system metrics
     if message in mkrbot_triggers['spell_count']:
-        bot_response(user, check_spells(), channel)
+        bot_response(user, check_spells(), channel, True)
     elif re.compile(mkrbot_triggers['check_cdp'][0]).match(message):
-        bot_response(user, get_cdp_by_id(message), channel)
+        bot_response(user, get_cdp_by_id(message), channel, True)
+    elif re.compile(mkrbot_triggers['check_cdp'][1]).match(message):
+        bot_response(user, get_cdp_by_id(message), channel, True)
 
     #* faqs commands
     elif message in mkrbot_triggers['faqs']['cdp']:
-        bot_response(user, mkrbot_responses['faqs']['cdp'], channel)
+        bot_response(user, mkrbot_responses['faqs']['cdp'], channel, True)
     elif message in mkrbot_triggers['faqs']['dai']:
-        bot_response(user, mkrbot_responses['faqs']['dai'], channel)
+        bot_response(user, mkrbot_responses['faqs']['dai'], channel, True)
+    elif message in mkrbot_triggers['faqs']['dsr']:
+        bot_response(user, mkrbot_responses['faqs']['dsr'], channel, True)
     elif message in mkrbot_triggers['faqs']['emergency_shutdown']:
-        bot_response(user, mkrbot_responses['faqs']['emergency_shutdown'], channel)
+        bot_response(user, mkrbot_responses['faqs']['emergency_shutdown'], channel, True)
     elif message in mkrbot_triggers['faqs']['keepers']:
-        bot_response(user, mkrbot_responses['faqs']['keepers'], channel)
+        bot_response(user, mkrbot_responses['faqs']['keepers'], channel, True)
     elif message in mkrbot_triggers['faqs']['governance']:
-        bot_response(user, mkrbot_responses['faqs']['governance'], channel)
+        bot_response(user, mkrbot_responses['faqs']['governance'], channel, True)
     elif message in mkrbot_triggers['faqs']['liquidation']:
-        bot_response(user, mkrbot_responses['faqs']['liquidation'], channel)
+        bot_response(user, mkrbot_responses['faqs']['liquidation'], channel, True)
     elif message in mkrbot_triggers['faqs']['makerdao']:
-        bot_response(user, mkrbot_responses['faqs']['makerdao'], channel)
+        bot_response(user, mkrbot_responses['faqs']['makerdao'], channel, True)
     elif message in mkrbot_triggers['faqs']['oracles']:
-        bot_response(user, mkrbot_responses['faqs']['oracles'], channel)
+        bot_response(user, mkrbot_responses['faqs']['oracles'], channel, True)
     elif message in mkrbot_triggers['faqs']['risk_management']:
-        bot_response(user, mkrbot_responses['faqs']['risk_management'], channel)
+        bot_response(user, mkrbot_responses['faqs']['risk_management'], channel, True)
     elif message in mkrbot_triggers['faqs']['stability_fee']:
-        bot_response(user, mkrbot_responses['faqs']['stability_fee'], channel)
-    
+        bot_response(user, mkrbot_responses['faqs']['stability_fee'], channel, True)
+    elif message in mkrbot_triggers['faqs']['vault']:
+        bot_response(user, mkrbot_responses['faqs']['vault'], channel, True)
+    elif message in mkrbot_triggers['faqs']['faqs_overview']:
+        bot_response(user, mkrbot_responses['faqs']['faqs_overview'], channel, True)
+
     #* resources commands
+    elif message in mkrbot_triggers['resources']['dev_docs']:
+        bot_response(user, mkrbot_responses['resources']['dev_docs'], channel, True)
     elif message in mkrbot_triggers['resources']['cdp_portal']:
-        bot_response(user, mkrbot_responses['resources']['cdp_portal'], channel)
+        bot_response(user, mkrbot_responses['resources']['cdp_portal'], channel, True)
+    elif message in mkrbot_triggers['resources']['oasis_app']:
+        bot_response(user, mkrbot_responses['resources']['oasis_app'], channel, True)
+    elif message in mkrbot_triggers['resources']['oasis_save']:
+        bot_response(user, mkrbot_responses['resources']['oasis_save'], channel, True)
+    elif message in mkrbot_triggers['resources']['oasis_trade']:
+        bot_response(user, mkrbot_responses['resources']['oasis_trade'], channel, True)
     elif message in mkrbot_triggers['resources']['governance_dashboard']:
-        bot_response(user, mkrbot_responses['resources']['governance_dashboard'], channel)
+        bot_response(user, mkrbot_responses['resources']['governance_dashboard'], channel, True)
     elif message in mkrbot_triggers['resources']['awesome_makerdao']:
-        bot_response(user, mkrbot_responses['resources']['awesome_makerdao'], channel)
+        bot_response(user, mkrbot_responses['resources']['awesome_makerdao'], channel, True)
     elif message in mkrbot_triggers['resources']['awesome_channels']:
-        bot_response(user, mkrbot_responses['resources']['awesome_channels'], channel)
+        bot_response(user, mkrbot_responses['resources']['awesome_channels'], channel, True)
     elif message in mkrbot_triggers['resources']['awesome_spend_dai']:
-        bot_response(user, mkrbot_responses['resources']['awesome_spend_dai'], channel)
+        bot_response(user, mkrbot_responses['resources']['awesome_spend_dai'], channel, True)
     elif message in mkrbot_triggers['resources']['awesome_use_dai']:
-        bot_response(user, mkrbot_responses['resources']['awesome_use_dai'], channel)
+        bot_response(user, mkrbot_responses['resources']['awesome_use_dai'], channel, True)
     elif message in mkrbot_triggers['resources']['awesome_lend_dai']:
-        bot_response(user, mkrbot_responses['resources']['awesome_lend_dai'], channel)
+        bot_response(user, mkrbot_responses['resources']['awesome_lend_dai'], channel, True)
     elif message in mkrbot_triggers['resources']['awesome_watch_dai']:
-        bot_response(user, mkrbot_responses['resources']['awesome_watch_dai'], channel)
+        bot_response(user, mkrbot_responses['resources']['awesome_watch_dai'], channel, True)
     elif message in mkrbot_triggers['resources']['awesome_hold_dai']:
-        bot_response(user, mkrbot_responses['resources']['awesome_hold_dai'], channel)
+        bot_response(user, mkrbot_responses['resources']['awesome_hold_dai'], channel, True)
     elif message in mkrbot_triggers['resources']['awesome_trade_dai']:
-        bot_response(user, mkrbot_responses['resources']['awesome_trade_dai'], channel)
+        bot_response(user, mkrbot_responses['resources']['awesome_trade_dai'], channel, True)
     elif message in mkrbot_triggers['resources']['awesome_dev_resoures']:
-        bot_response(user, mkrbot_responses['resources']['awesome_dev_resoures'], channel)
+        bot_response(user, mkrbot_responses['resources']['awesome_dev_resoures'], channel, True)
     elif message in mkrbot_triggers['resources']['awesome_audits_security']:
-        bot_response(user, mkrbot_responses['resources']['awesome_audits_security'], channel)
+        bot_response(user, mkrbot_responses['resources']['awesome_audits_security'], channel, True)
+    elif message in mkrbot_triggers['resources']['awesome_overview']:
+        bot_response(user, mkrbot_responses['resources']['awesome_overview'], channel, True)
 
     #* help
     elif 'help' in message:
-        bot_response(user, mkrbot_responses['help'], channel)
-    
+        bot_response(user, mkrbot_responses['help'], channel, False)
+
     #* default response
     else:
-        bot_response(user, 'I didn\'t get you. Try `help` if you need the available commands', channel)
+        bot_response(user, mkrbot_responses['no_commands'], channel, False)
 
 
-def bot_response(_user, _message, _channel): 
+def bot_response(_user, _message, _channel, unfurl):
 	# print(_message)
-	rocket.send_message(_message, channels['chakachat'])
+    # if unfurl:
+    #     rocket.send_message(_message, channels['chakachat'])
+    # else:
+    rocket.send_message(_message, channels['chakachat'], parseUrls=False)

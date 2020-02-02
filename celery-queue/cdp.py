@@ -1,6 +1,7 @@
 
 import os
 from datetime import datetime
+from dateutil.parser import parse
 import requests
 
 MAKER_GRAPH_URL = os.getenv('MAKER_GRAPH_URL')
@@ -21,24 +22,38 @@ def get_cdp_by_id(message):
     cup = response.json()['data']['getCup']
     print(cup)
     
+    if cup['ratio'] == '0' or cup['ratio'] == 0 or cup['ratio'] == None:
+        cdp_string = '```CDP ID: {id} | Collateralization Ratio: 0%\n'.format(
+            id=cup['id']
+        )
+    else:
     # id and 
-    cdp_string = '```CDP ID: {id} | Collateralization Ratio: {ratio}\n'.format(
-        id=cup['id'],
-        ratio=str(round(float(cup['ratio']),2)) + '%'
-    )
+        cdp_string = '```CDP ID: {id} | Collateralization Ratio: {ratio}\n'.format(
+            id=cup['id'],
+            ratio=str(round(float(cup['ratio']),2)) + '%'
+        )
     
-    # add outstanding dai and collateral locked
-    cdp_string = cdp_string + 'Outstanding Dai: {art} Dai | Collateral Locked: {ink} ETH (~${ink_usd})\n'.format(
-        ink=str(round(float(cup['ink']),2)),
-        ink_usd=str(round(float(cup['ink'])*float(cup['pip']),2)),
-        art=str(round(float(cup['art']),2))
-    )
+    # add outstanding dai
+    if cup['art'] == '0' or cup['art'] == 0 or cup['art'] == None:
+        cdp_string = cdp_string + 'Outstanding Dai: 0 Dai | '
+    else:
+        cdp_string = cdp_string + 'Outstanding Dai: {art} Dai | '.format(
+            art=str(round(float(cup['art']),2)))
+
+    # add collateral locked
+    if cup['ink'] == '0' or cup['ink'] == 0 or cup['ink'] == None:
+        cdp_string = cdp_string + 'Collateral Locked: 0 ETH (~$0)\n'
+    else:
+        cdp_string = cdp_string + 'Collateral Locked: {ink} ETH (~${ink_usd})\n'.format(
+            ink=str(round(float(cup['ink']),2)),
+            ink_usd=str(round(float(cup['ink'])*float(cup['pip']),2))
+            )
     
     # add last action
     for action in cup['actions']['nodes']:
-        if ":" == action['time'][-3:-2]:
-            action['time'] = action['time'][:-3] + action['time'][-2:]
-        date = datetime.strptime(action['time'], '%Y-%m-%dT%H:%M:%S+%z').strftime('%b %d, %Y at %H:%M%p %Z')
+        # if ":" == action['time'][-3:-2]:
+        #     action['time'] = action['time'][:-3] + action['time'][-2:]
+        date = parse(action['time']).strftime('%b %d, %Y at %H:%M%p %Z')
         if action['act'] == 'SHUT' or action['act'] == 'OPEN':
             cdp_string = cdp_string + 'Last Action: {action_name} at {time}\n'.format(
                 action_name=action['act'].capitalize(),

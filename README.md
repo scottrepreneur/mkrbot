@@ -7,6 +7,11 @@ A RocketChat bot for MKR holders and Dai users.
 - [Celery](http://www.celeryproject.org/) 
 - [Redis](https://redis.io/)
 
+My command list is [available here](https://docs.google.com/spreadsheets/d/1apOxgKIeeCTUnisfSRS0TLxiXsIFFB0xvtYLoxSpYX0/edit#gid=527738112).
+
+
+Test me out in the [#chakachat]() channel on the MakerDAO RocketChat
+
 ### Installation
 
 ```bash
