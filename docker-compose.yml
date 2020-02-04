@@ -17,8 +17,8 @@ services:
       context: celery-queue
       dockerfile: Dockerfile
     env_file: .env
-    # volumes:
-    #   - '.:/queue'
+    volumes:
+      - './celery-queue:/queue'
     depends_on:
       - redis
   # monitor:

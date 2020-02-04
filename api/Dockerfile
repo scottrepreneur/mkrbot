@@ -8,7 +8,7 @@ ENV HOST 0.0.0.0
 ENV PORT 5000
 ENV DEBUG true
 
-COPY . /api
+COPY requirements.txt /api/requirements.txt
 WORKDIR /api
 # COPY requirements.txt .
 

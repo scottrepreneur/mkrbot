@@ -24,7 +24,7 @@ git clone https://github.com/scottrepreneur/mkr-bot
 docker-compose up -d --build
 ```
 
-This will expose the Flask application's endpoints on port `5001` as well as a [Flower](https://github.com/mher/flower) server for monitoring workers on port `5555`
+This will expose the Flask application's endpoints on port `5000`
 
 To add more workers:
 ```bash
