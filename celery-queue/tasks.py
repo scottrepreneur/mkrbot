@@ -18,8 +18,8 @@ def add(x: int, y: int) -> int:
 @celery.task(name='tasks.process_message', bind=True)
 def process_message(self, user, message, channel):
 	# check for @mkr.bot trigger
-	print(message[:message.find(' ')] in mkrbot_names)
 	
-	if message[:message.find(' ')] in mkrbot_names:
-		_message = message[message.find(' '):]
-		mkrbot_message(user, _message, channel)
+	for name in mkrbot_names:
+		if message[:message.find(' ')].casefold() == name.casefold():
+			_message = message[message.find(' '):]
+			mkrbot_message(user, _message, channel)

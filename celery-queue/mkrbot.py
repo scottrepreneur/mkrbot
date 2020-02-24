@@ -5,6 +5,7 @@ from rocket import channels, rocket
 
 from check_hat import check_spells
 from vault import get_vault_by_id
+from mkrgov import print_spells
 
 MAKER_COMMUNITY_PORTAL = os.getenv('MAKER_COMMUNITY_PORTAL')
 MKRBOT_GUIDE_URL = "https://community-development.makerdao.com/faqs/mkrbot-guide"
@@ -13,10 +14,15 @@ CREATOR_DM_URL = "https://chat.makerdao.com/direct/scottrepreneur"
 
 ENVIRONMENT = os.getenv('ENVIRONMENT')
 
+#? bot admin
 # TODO handle channel delegation
 # TODO respond/tag specific users?
-# TODO Add MKR Burn makerburn.com
+
+#? first commands
 # TODO Update check spells command to use jernjml's version/ updating
+
+#? new updates
+# TODO Add MKR Burn makerburn.com
 # TODO Integrate Governance CMS API
 # TODO add oracle price feeds
 
@@ -466,7 +472,7 @@ def mkrbot_message(user, message, channel):
                             # match any case
                             if message.casefold() == sub.casefold():
                                 command_found = True
-                                bot_response(user, check_spells(), channel, True)
+                                bot_response(user, print_spells(), channel, True)
 
                         elif query == 'check_vault':
                             if re.compile(sub).match(message):
