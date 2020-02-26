@@ -116,7 +116,7 @@ def get_spell_titles(spells):
     return spells
 
 def print_spells():
-    spells = get_spell_titles(set_hat(previous_spell(all_spells())))
+    spells = get_spell_titles(set_hat(previous_spell(set_active(all_spells()))))
     spells.sort(key=lambda x: float(x['approvals']), reverse=True)
 
     trim_title = 70
@@ -129,7 +129,7 @@ def print_spells():
             message = message + "> `{}` | [{}]({}) :back:\n".format(spell['approvals'].rjust(10, ' '), spell['title'][:trim_title], spell['link'])
         elif spell ['active']:
             message = message + "> `{}` | [{}]({}) :up:\n".format(spell['approvals'].rjust(10, ' '), spell['title'][:trim_title], spell['link'])
-        elif spell['casted']:
+        elif spell['casted'] is not None:
             message = message + "> `{}` | [{}]({}) :heavy_check_mark:\n".format(spell['approvals'].rjust(10, ' '), spell['title'], spell['link'])
         else:
             message = message + "> `{}` | [{}]({})\n".format(spell['approvals'].rjust(10, ' '), spell['title'], spell['link'])

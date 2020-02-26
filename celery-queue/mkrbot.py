@@ -8,8 +8,8 @@ from vault import get_vault_by_id
 from mkrgov import print_spells, mkrgov_domain
 
 MAKER_COMMUNITY_PORTAL = os.getenv('MAKER_COMMUNITY_PORTAL')
-MKRBOT_GUIDE_URL = "https://community-development.makerdao.com/faqs/mkrbot-guide"
-CONTRIBUTING_URL = "https://www.github.com/scottrepreneur/mkrbot/CONTRIBUTING"
+MKRBOT_GUIDE_URL = "https://www.github.com/scottrepreneur/mkrbot/mkrbot_guide.md"
+CONTRIBUTING_URL = "https://www.github.com/scottrepreneur/mkrbot/CONTRIBUTING.md"
 CREATOR_DM_URL = "https://chat.makerdao.com/direct/scottrepreneur"
 
 ENVIRONMENT = os.getenv('ENVIRONMENT')
@@ -421,7 +421,7 @@ Here are the [AMD](https://awesome.makerdao.com) Resources you can request
 Hey, I'm @mkr.bot. I can help you find resources or information about the Maker Protocol.
 > *Commands*
 > FAQs: `faqs {{governance | vaults | dai | stability fee}}`
-> Spells Count: `spells count`
+> Spells Count: `spells`
 > Vault Lookup: `vault {{ID}}`
 > Awesome MakerDAO: `amd {{use | lend dai | spend | watch dai}}`
 [mkr.bot Guide]({mkrbot_guide}) | [Expand my commands!]({contributing_link}) | Let [@scottrepreneur]({creator_dm}) know if you have any issues'''.format(
@@ -432,7 +432,7 @@ Hey, I'm @mkr.bot. I can help you find resources or information about the Maker 
 I didn\'t get you. Let me look up those Maker resources for you.
 > *Commands*
 > FAQs: `faqs {{governance | vaults | dai | stability fee}}`
-> Spells Count: `spells count`
+> Spells Count: `spells`
 > Vault Lookup: `vault {{ID}}`
 > Awesome MakerDAO: `amd {{use | lend dai | spend | watch dai}}`
 [mkr.bot Guide]({mkrbot_guide}) | [Expand my commands!]({contributing_link}) | Let [@scottrepreneur]({creator_dm}) know if you have any issues'''.format(
