@@ -45,7 +45,7 @@ def all_spells():
     all_spells = []
     for spell in spells:
         if float(spell['approvals']) > 50:
-            spell['approvals'] = str(round(float(spell['approvals']), 2)).rjust(10, ' ')
+            spell['approvals'] = str(round(float(spell['approvals']), 2))
             all_spells.append(spell)
     
     return all_spells
@@ -124,16 +124,16 @@ def print_spells():
     message = "" # "Spell count at block _{}_\n".format('blockID')
     for spell in spells:
         if spell['hat']:
-            message = message + "> {} | [{}]({}) :tophat:\n".format(spell['approvals'], spell['title'][:trim_title], spell['link'])
+            message = message + "> `{}` | [{}]({}) :tophat:\n".format(spell['approvals'].rjust(10, ' '), spell['title'][:trim_title], spell['link'])
         elif spell['prev_cast']:
-            message = message + "> {} | [{}]({}) :back:\n".format(spell['approvals'], spell['title'][:trim_title], spell['link'])
+            message = message + "> `{}` | [{}]({}) :back:\n".format(spell['approvals'].rjust(10, ' '), spell['title'][:trim_title], spell['link'])
         elif spell ['active']:
-            message = message + "> {} | [{}]({}) :up:\n".format(spell['approvals'], spell['title'][:trim_title], spell['link'])
+            message = message + "> `{}` | [{}]({}) :up:\n".format(spell['approvals'].rjust(10, ' '), spell['title'][:trim_title], spell['link'])
+        elif spell['casted']:
+            message = message + "> `{}` | [{}]({}) :heavy_check_mark:\n".format(spell['approvals'].rjust(10, ' '), spell['title'], spell['link'])
         else:
-            message = message + "> {} | [{}]({})\n".format(spell['approvals'], spell['title'], spell['link'])
+            message = message + "> `{}` | [{}]({})\n".format(spell['approvals'].rjust(10, ' '), spell['title'], spell['link'])
 
     message = message + "[Executive Votes on mkrgov.science]({})".format(mkrgov_domain + 'executive')
 
     return message
-
-print(print_spells())

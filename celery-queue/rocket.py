@@ -1,6 +1,6 @@
 
 import os
-from rocketchat.api import RocketChatAPI
+from api import RocketChatAPI
 
 MAKER_CHAT_DOMAIN = os.getenv('MAKER_CHAT_DOMAIN')
 ROCKET_BOT_USER = os.getenv('ROCKET_BOT_USER')

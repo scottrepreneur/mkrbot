@@ -5,7 +5,7 @@ from rocket import channels, rocket
 
 from check_hat import check_spells
 from vault import get_vault_by_id
-from mkrgov import print_spells
+from mkrgov import print_spells, mkrgov_domain
 
 MAKER_COMMUNITY_PORTAL = os.getenv('MAKER_COMMUNITY_PORTAL')
 MKRBOT_GUIDE_URL = "https://community-development.makerdao.com/faqs/mkrbot-guide"
@@ -350,7 +350,9 @@ mkrbot_triggers = {
     },
     'lost': {
         'help': [
-            'help'
+            'help',
+            'i need help',
+            'help me'
         ]
     }
 }
@@ -454,10 +456,15 @@ def mkrbot_message(user, message, channel):
             for query in mkrbot_triggers[trigger_group]:
 
                 # handle non-queries here for simple matching
-                if trigger_group != 'queries':
+                if trigger_group == 'lost':
+                    for sub in mkrbot_triggers[trigger_group][query]:
+                        if message.casefold() == sub.casefold():
+                            command_found = True
+                            bot_response(user, mkrbot_responses[trigger_group][query], channel, False)
+
+                elif trigger_group != 'queries':
                     for sub in mkrbot_triggers[trigger_group][query]:
 
-                        # match any case
                         if message.casefold() == sub.casefold():
                             command_found = True
                             bot_response(user, mkrbot_responses[trigger_group][query], channel, True)
@@ -469,30 +476,36 @@ def mkrbot_message(user, message, channel):
                         # depending on the query, regex match
                         if query == 'spell_count':
 
-                            # match any case
                             if message.casefold() == sub.casefold():
                                 command_found = True
-                                bot_response(user, print_spells(), channel, True)
+                                bot_response(user, print_spells(), channel, False)
 
                         elif query == 'check_vault':
                             if re.compile(sub).match(message):
                                 command_found = True
-                                bot_response(user, get_vault_by_id(message), channel, True)
+                                bot_response(user, get_vault_by_id(message), channel, False)
         
         # don't send two commands
         if command_found:
             break;
         else:               # otherwise send no commands found
             command_found = True
-            bot_response(user, mkrbot_responses['lost']['no_commands'], channel, True)
+            bot_response(user, mkrbot_responses['lost']['no_commands'], channel, False)
 
-def bot_response(_user, _message, _channel, unfurl):
+def bot_response(_user, _message, _channel, _unfurl):
     # print only on Dev
     if ENVIRONMENT == 'PRODUCTION':
-        if unfurl:
-            rocket.send_message(_message, channels['chakachat'])
+        if _unfurl:
+            rocket.send_message(_message, channels['chakachat'], [{}])
         else:
-            rocket.send_message(_message, channels['chakachat'], parseUrls=False)
+            rocket.send_message(
+                _message, 
+                channels['chakachat'], 
+                [{
+                    "title": "Maker Spells",
+                    "text": "blah"
+                }]
+            )
     
     else:
         print(_message)
