@@ -8,22 +8,17 @@ from vault import get_vault_by_id
 from mkrgov import print_spells, mkrgov_domain
 
 MAKER_COMMUNITY_PORTAL = os.getenv('MAKER_COMMUNITY_PORTAL')
+AMD_LINK = "https://awesome.makerdao.com"
+DEV_DOCS_LINK = "https://developer.makerdao.com"
+OASIS_LINK = "https://oasis.app"
 MKRBOT_GUIDE_URL = "https://www.github.com/scottrepreneur/mkrbot/mkrbot_guide.md"
 CONTRIBUTING_URL = "https://www.github.com/scottrepreneur/mkrbot/CONTRIBUTING.md"
 CREATOR_DM_URL = "https://chat.makerdao.com/direct/scottrepreneur"
 
 ENVIRONMENT = os.getenv('ENVIRONMENT')
 
-#? bot admin
-# TODO handle channel delegation
-# TODO respond/tag specific users?
-
-#? first commands
-# TODO Update check spells command to use jernjml's version/ updating
-
 #? new updates
 # TODO Add MKR Burn makerburn.com
-# TODO Integrate Governance CMS API
 # TODO add oracle price feeds
 
 mkrbot_names = [
@@ -359,23 +354,25 @@ mkrbot_triggers = {
 
 language_code = '/en'
 faqs_url = '/makerdao-mcd-faqs/faqs'
+scd_faqs_url = '/makerdao-scd-faqs/scd-faqs'
+
 mkrbot_responses = {
     'faqs': {
-        'cdp': 'Heads up! CDPs are called Vaults in Multi-Collateral Dai\nhttps://community-development.makerdao.com/makerdao-mcd-faqs/faqs/vault',
-        'dai': MAKER_COMMUNITY_PORTAL + faqs_url + '/dai',
-        'dsr': MAKER_COMMUNITY_PORTAL + faqs_url + '/dsr',
-        'emergency_shutdown': MAKER_COMMUNITY_PORTAL + faqs_url + '/emergency-shutdown',
-        'governance': MAKER_COMMUNITY_PORTAL + '/makerdao-scd-faqs/scd-faqs' + '/governance',
-        'glossary': MAKER_COMMUNITY_PORTAL + faqs_url + '/glossary',
-        'keepers': MAKER_COMMUNITY_PORTAL + '/makerdao-scd-faqs/scd-faqs' + '/keepers',
-        'liquidation': MAKER_COMMUNITY_PORTAL + faqs_url + '/liquidation',
-        'makerdao': MAKER_COMMUNITY_PORTAL + '/makerdao-scd-faqs/scd-faqs' + '/makerdao',
-        'oracles': MAKER_COMMUNITY_PORTAL + faqs_url + '/oracles',
-        'risk_management': MAKER_COMMUNITY_PORTAL + '/makerdao-scd-faqs/scd-faqs' + '/risk-management',
-        'stability_fee': MAKER_COMMUNITY_PORTAL + faqs_url + '/stability-fee',
-        'vault': MAKER_COMMUNITY_PORTAL + faqs_url + '/vault',
-        'faqs_overview': '''
-Here's all the [FAQs](https://community-development.makerdao.com/makerdao-mcd-faqs/faqs) you can request
+        'cdp': f'Heads up! CDPs are called Vaults in Multi-Collateral Dai\n{MAKER_COMMUNITY_PORTAL}{faqs_url}/vault',
+        'dai': f'{MAKER_COMMUNITY_PORTAL}{faqs_url}/dai',
+        'dsr': f'{MAKER_COMMUNITY_PORTAL}{faqs_url}/dsr',
+        'emergency_shutdown': f'{MAKER_COMMUNITY_PORTAL}{faqs_url}/emergency-shutdown',
+        'governance': f'{MAKER_COMMUNITY_PORTAL}{scd_faqs_url}/governance',
+        'glossary': f'{MAKER_COMMUNITY_PORTAL}{faqs_url}/glossary',
+        'keepers': f'{MAKER_COMMUNITY_PORTAL}{scd_faqs_url}/keepers',
+        'liquidation': f'{MAKER_COMMUNITY_PORTAL}{faqs_url}/liquidation',
+        'makerdao': f'{MAKER_COMMUNITY_PORTAL}{scd_faqs_url}/makerdao',
+        'oracles': f'{MAKER_COMMUNITY_PORTAL}{faqs_url}/oracles',
+        'risk_management': f'{MAKER_COMMUNITY_PORTAL}{scd_faqs_url}/risk-management',
+        'stability_fee': f'{MAKER_COMMUNITY_PORTAL}{faqs_url}/stability-fee',
+        'vault': f'{MAKER_COMMUNITY_PORTAL}{faqs_url}/vault',
+        'faqs_overview': f'''
+Here's all the [FAQs]({MAKER_COMMUNITY_PORTAL}{faqs_url}) you can request
 > We've got a glossary:  `glossary`
 > Dai: `dai faq`
 > Dai Savings Rate: `dsr faq`
@@ -388,24 +385,24 @@ Here's all the [FAQs](https://community-development.makerdao.com/makerdao-mcd-fa
 > Stability Fee: `stability fee faq`'''
     },
     'resources': {
-        'dev_docs': 'https://developer.makerdao.com',
-        'cdp_portal': 'Heads Up! CDPs are now called Vaults and the portal has moved to Oasis\nhttps://oasis.app/',
-        'oasis_app': 'https://oasis.app/borrow',
-        'oasis_save': 'https://oasis.app/save',
-        'oasis_trade': 'https://oasis.app/trade',
-        'governance_dashboard': 'https://vote.makerdao.com',
-        'awesome_makerdao': 'https://awesome.makerdao.com',
-        'awesome_channels': 'https://awesome.makerdao.com#official-channels',
-        'awesome_spend_dai': 'https://awesome.makerdao.com#spend-your-dai',
-        'awesome_use_dai': 'https://awesome.makerdao.com#use-your-dai',
-        'awesome_lend_dai': 'https://awesome.makerdao.com#lend-your-dai',
-        'awesome_watch_dai': 'https://awesome.makerdao.com#watch-your-dai',
-        'awesome_hold_dai': 'https://awesome.makerdao.com#hold-your-dai',
-        'awesome_trade_dai': 'https://awesome.makerdao.com#trade-your-dai',
-        'awesome_dev_resoures': 'https://awesome.makerdao.com#developer-resources',
-        'awesome_audits_security': 'https://awesome.makerdao.com#audits-and-security',
-        'awesome_overview': '''
-Here are the [AMD](https://awesome.makerdao.com) Resources you can request
+        'dev_docs': f'{DEV_DOCS_LINK}',
+        'cdp_portal': f'Heads Up! CDPs are now called Vaults and the portal has moved to Oasis\n{OASIS_LINK}',
+        'oasis_app': f'{OASIS_LINK}/borrow',
+        'oasis_save': f'{OASIS_LINK}/save',
+        'oasis_trade': f'{OASIS_LINK}/trade',
+        'governance_dashboard': f'https://vote.makerdao.com',
+        'awesome_makerdao': f'{AMD_LINK}',
+        'awesome_channels': f'{AMD_LINK}official-channels',
+        'awesome_spend_dai': f'{AMD_LINK}#spend-your-dai',
+        'awesome_use_dai': f'{AMD_LINK}#use-your-dai',
+        'awesome_lend_dai': f'{AMD_LINK}#lend-your-dai',
+        'awesome_watch_dai': f'{AMD_LINK}#watch-your-dai',
+        'awesome_hold_dai': f'{AMD_LINK}#hold-your-dai',
+        'awesome_trade_dai': f'{AMD_LINK}#trade-your-dai',
+        'awesome_dev_resoures': f'{AMD_LINK}#developer-resources',
+        'awesome_audits_security': f'{AMD_LINK}#audits-and-security',
+        'awesome_overview': f'''
+Here are the [AMD]({AMD_LINK}) Resources you can request
 > Official Channels: `amd channels`
 > Spend Dai: `amd spend`
 > Use Dai: `amd use`
@@ -417,28 +414,22 @@ Here are the [AMD](https://awesome.makerdao.com) Resources you can request
 > Audits & Security: `amd audit`'''
     },
     'lost': {
-        'help': '''
+        'help': f'''
 Hey, I'm @mkr.bot. I can help you find resources or information about the Maker Protocol.
 > *Commands*
 > FAQs: `faqs {{governance | vaults | dai | stability fee}}`
 > Spells Count: `spells`
 > Vault Lookup: `vault {{ID}}`
 > Awesome MakerDAO: `amd {{use | lend dai | spend | watch dai}}`
-[mkr.bot Guide]({mkrbot_guide}) | [Expand my commands!]({contributing_link}) | Let [@scottrepreneur]({creator_dm}) know if you have any issues'''.format(
-            mkrbot_guide=MKRBOT_GUIDE_URL,
-            contributing_link=CONTRIBUTING_URL,
-            creator_dm=CREATOR_DM_URL),
-        'no_commands': '''
+[mkr.bot Guide]({MKRBOT_GUIDE_URL}) | [Expand my commands!]({CONTRIBUTING_URL}) | Let [@scottrepreneur]({CREATOR_DM_URL}) know if you have any issues''',
+        'no_commands': f'''
 I didn\'t get you. Let me look up those Maker resources for you.
 > *Commands*
 > FAQs: `faqs {{governance | vaults | dai | stability fee}}`
 > Spells Count: `spells`
 > Vault Lookup: `vault {{ID}}`
 > Awesome MakerDAO: `amd {{use | lend dai | spend | watch dai}}`
-[mkr.bot Guide]({mkrbot_guide}) | [Expand my commands!]({contributing_link}) | Let [@scottrepreneur]({creator_dm}) know if you have any issues'''.format(
-            mkrbot_guide=MKRBOT_GUIDE_URL,
-            contributing_link=CONTRIBUTING_URL,
-            creator_dm=CREATOR_DM_URL)
+[mkr.bot Guide]({MKRBOT_GUIDE_URL}) | [Expand my commands!]({CONTRIBUTING_URL}) | Let [@scottrepreneur]({CREATOR_DM_URL}) know if you have any issues'''
     }
 }
 
@@ -496,11 +487,11 @@ def bot_response(_user, _message, _channel, _unfurl):
     # print only on Dev
     if ENVIRONMENT == 'PRODUCTION':
         if _unfurl:
-            rocket.send_message(_message, channels['chakachat'], [{}])
+            rocket.send_message(_message, _channel, [{}])
         else:
             rocket.send_message(
                 _message, 
-                channels['chakachat'], 
+                _channel, 
                 [{
                     "title": "Maker Spells",
                     "text": "blah"

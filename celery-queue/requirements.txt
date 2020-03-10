@@ -1,10 +1,12 @@
 amqp==2.2.2
 Babel==2.5.3
+beautifulsoup4==4.8.2
 billiard==3.5.0.3
 python-dateutil==2.5.3
 celery==4.2.1
 flower==0.9.2
 kombu==4.2.0
+praw==6.5.1
 pytz==2018.3
 redis==2.10.6
 requests==2.22.0

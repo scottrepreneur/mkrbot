@@ -38,7 +38,7 @@ def get_spells():
             spell['title'] = spell['id']
         return spells
     else:
-        raise Exception("Query failed to run by returning code of {}. {}".format(response.status_code, spells_query))
+        raise Exception(f"Query failed to run by returning code of {response.status_code}. {spells_query}")
 
 def all_spells():
     spells = get_spells()
@@ -124,16 +124,16 @@ def print_spells():
     message = "" # "Spell count at block _{}_\n".format('blockID')
     for spell in spells:
         if spell['hat']:
-            message = message + "> `{}` | [{}]({}) :tophat:\n".format(spell['approvals'].rjust(10, ' '), spell['title'][:trim_title], spell['link'])
+            message = message + f"> `{spell['approvals'].rjust(10, ' ')}` | [{spell['title'][:trim_title]}]({spell['link']}) :tophat:\n"
         elif spell['prev_cast']:
-            message = message + "> `{}` | [{}]({}) :back:\n".format(spell['approvals'].rjust(10, ' '), spell['title'][:trim_title], spell['link'])
+            message = message + f"> `{spell['approvals'].rjust(10, ' ')}` | [{spell['title'][:trim_title]}]({spell['link']}) :back:\n"
         elif spell ['active']:
-            message = message + "> `{}` | [{}]({}) :up:\n".format(spell['approvals'].rjust(10, ' '), spell['title'][:trim_title], spell['link'])
+            message = message + f"> `{spell['approvals'].rjust(10, ' ')}` | [{spell['title'][:trim_title]}]({spell['link']}) :up:\n"
         elif spell['casted'] is not None:
-            message = message + "> `{}` | [{}]({}) :heavy_check_mark:\n".format(spell['approvals'].rjust(10, ' '), spell['title'], spell['link'])
+            message = message + f"> `{spell['approvals'].rjust(10, ' ')}` | [{spell['title'][:trim_title]}]({spell['link']}) :heavy_check_mark:\n"
         else:
-            message = message + "> `{}` | [{}]({})\n".format(spell['approvals'].rjust(10, ' '), spell['title'], spell['link'])
+            message = message + f"> `{spell['approvals'].rjust(10, ' ')}` | [{spell['title']}]({spell['link']})\n"
 
-    message = message + "[Executive Votes on mkrgov.science]({})".format(mkrgov_domain + 'executive')
+    message = message + f"[Executive Votes on mkrgov.science]({mkrgov_domain + 'executive'})"
 
     return message
