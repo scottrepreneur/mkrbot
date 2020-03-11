@@ -12,6 +12,7 @@ services:
      - "5000:5000"
     depends_on:
       - redis
+        
   worker:
     build:
       context: celery-queue
@@ -21,48 +22,6 @@ services:
       - './celery-queue:/queue'
     depends_on:
       - redis
-  # monitor:
-  #   build:
-  #     context: celery-queue
-  #     dockerfile: Dockerfile
-  #   ports:
-  #    - "5555:5555"
-  #   entrypoint: flower
-  #   command:  -A tasks --port=5555 --broker=redis://redis:6379/0
-  #   depends_on:
-  #     - redis
+
   redis:
     image: redis
-
-  nginx:
-    restart: always
-    container_name: nginx
-    build: ./nginx
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/static:/app/static
-      - ./ningx/vhost:/etc/nginx/vhost.d
-      - ./nginx/html:/usr/share/nginx/html
-      - ./nginx/certs:/etc/nginx/certs
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-    labels:
-      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
-    depends_on:
-      - web
-
-  letsencrypt:
-    restart: always
-    container_name: letsencrypt
-    image: jrcs/letsencrypt-nginx-proxy-companion
-    environment:
-      NGINX_PROXY_CONTAINER: nginx
-      NGINX_DOCKER_GEN_CONTAINER: nginx
-    volumes:
-      - ./nginx/vhost:/etc/nginx/vhost.d
-      - ./nginx/html:/usr/share/nginx/html
-      - ./nginx/certs:/etc/nginx/certs
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    depends_on:
-      - nginx

@@ -33,7 +33,7 @@ def maker_chat():
 		if verify_token == MKRBOT_TOKEN:
 			return jsonify({'status':'success'}), 200
 		else:
-			return jsonify({'status':'bad token'}), 401
+			return jsonify({'status':'bad token. try POST'}), 401
 
 	elif request.method == 'POST':
 
@@ -55,7 +55,7 @@ def maker_chat():
 				return jsonify({'status':'success'}), 200
 
 		else:
-			return jsonify({'status':'not authorised'}), 401
+			return jsonify({'status':'not authorized'}), 401
 
 	else:
 		return jsonify({'status':'try GET or POST'}), 400
