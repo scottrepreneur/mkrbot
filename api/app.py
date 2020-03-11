@@ -30,15 +30,17 @@ def check_task(task_id: str) -> str:
 def maker_chat():
 	if request.method == 'GET':
 		verify_token = request.args.get('verify_token')
-		if verify_token == MKRBOT_TOKEN:
+		if verify_token == MKRBOT_TOKEN or verify_token == MKRBOT_DM_TOKEN:
 			return jsonify({'status':'success'}), 200
 		else:
 			return jsonify({'status':'bad token. try POST'}), 401
 
 	elif request.method == 'POST':
 
-		verify_token = request.headers.get('verify_token')
-		if verify_token == MKRBOT_TOKEN or verify_token == MKRBOT_DM_TOKEN:
+		# verify_token = request.headers.get('verify_token')
+		auth_token = request.headers.get('Authorization')
+		# if verify_token == MKRBOT_TOKEN or verify_token == MKRBOT_DM_TOKEN:
+		if auth_token == f"Bearer {MKRBOT_TOKEN}" or auth_token == f"Bearer {MKRBOT_DM_TOKEN}":
 			# print(request.data)
 			if request.data is None:
 				return jsonify({'status':'no data in webhook'}), 400
@@ -67,9 +69,9 @@ def forum_updates():
 		if verify_token == MKRBOT_TOKEN:
 			return jsonify({'status':'success'}), 200
 		else:
-			return jsonify({'status':'bad token'}), 401
+			return jsonify({'status':'bad token, try POST'}), 401
 
 	elif request.method == 'POST':
 		
 		celery.send_task('tasks.forum_update', args=[json.loads(request.data)], kwargs={})
-		return jsonify({'status':'not authorised'}), 401
+		return jsonify({'status':'success'}), 200
