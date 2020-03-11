@@ -38,5 +38,5 @@ def process_message(self, user, message, channel):
 @celery.task(name='tasks.forum_update', bind=True)
 def forum_update(self, data):
 
-	if data['topic_id'] == 84 and data['username'] == 'LongForWisdom':
+	if data['topic_id'] == 84 and data['username'] == 'LongForWisdom' and data['post_number'] != 1:
 		forum_cross_post(data)
