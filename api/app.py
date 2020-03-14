@@ -38,19 +38,24 @@ def maker_chat():
 	elif request.method == 'POST':
 
 		auth_token = request.headers.get('Authorization')
-		if auth_token == f"Bearer {MKRBOT_TOKEN}" or auth_token == f"Bearer {MKRBOT_DM_TOKEN}":
+		if auth_token == f"Bearer {MKRBOT_TOKEN}":
 
 			if request.data is None:
 				return jsonify({'status':'no data in webhook'}), 400
 			
 			else:
 				data = json.loads(request.data)
-				print(data)
-				user = data['user']
-				message = data['message']
-				channel = data['channel']
+				celery.send_task('tasks.process_message', args=[data['user'], data['message'], data['channel'], False], kwargs={})
+				
+				return jsonify({'status':'success'}), 200
 
-				celery.send_task('tasks.process_message', args=[user, message, channel], kwargs={})
+		elif auth_token == f"Bearer {MKRBOT_DM_TOKEN}":
+			if request.data is None:
+				return jsonify({'status':'no data in webhook'}), 400
+			
+			else:
+				data = json.loads(request.data)
+				celery.send_task('tasks.process_message', args=[data['user'], data['message'], data['channel'], True], kwargs={})
 				
 				return jsonify({'status':'success'}), 200
 

@@ -18,22 +18,23 @@ def add(x: int, y: int) -> int:
     return x + y
 
 @celery.task(name='tasks.process_message', bind=True)
-def process_message(self, user, message, channel):
+def process_message(self, user, message, channel, dm):
 	
-	# TODO handle DM here
-	if not 'bot' in message[:message.find(' ')]:
+	# anyone can dm, maybe want to add a blacklist eventually?
+	if dm:
 		_message = message
 		mkrbot_message(user, _message, channel)
 
-	# check for @mkr.bot trigger
-	for c in approved_channels:
-		print(channels[c] == channel)
-		if channel == channels[c]:
-			print(message[:message.find(' ')].casefold())
-			for name in mkrbot_names:
-				if message[:message.find(' ')].casefold() == name.casefold():
-					_message = message[message.find(' '):]
-					mkrbot_message(user, _message, channel)
+	# check for @mkr.bot trigger on channel messages
+	else:
+		for c in approved_channels:
+			print(channels[c] == channel)
+			if channel == channels[c]:
+				print(message[:message.find(' ')].casefold())
+				for name in mkrbot_names:
+					if message[:message.find(' ')].casefold() == name.casefold():
+						_message = message[message.find(' '):]
+						mkrbot_message(user, _message, channel)
 
 @celery.task(name='tasks.forum_update', bind=True)
 def forum_update(self, data):

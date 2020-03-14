@@ -1,7 +1,7 @@
 import os
 import re
 import difflib
-from rocket import channels, rocket
+from rocket import rocket
 
 from check_hat import check_spells
 from vault import get_vault_by_id
@@ -485,7 +485,10 @@ def mkrbot_message(user, message, channel):
 
 def bot_response(_user, _message, _channel, _unfurl):
     # print only on Dev
-    if ENVIRONMENT == 'PRODUCTION':
+    if ENVIRONMENT == 'DEVELOPMENT':
+        print(_message)
+        
+    else:
         if _unfurl:
             rocket.send_message(_message, _channel, [{}])
         else:
@@ -497,6 +500,3 @@ def bot_response(_user, _message, _channel, _unfurl):
                     "text": "blah"
                 }]
             )
-    
-    else:
-        print(_message)
