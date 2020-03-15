@@ -2,11 +2,12 @@ import json
 import requests
 
 gov_cms_api = 'https://cms-gov.makerfoundation.com/content/governance-dashboard?network=mainnet'
-subgraph_api = 'https://api.thegraph.com/subgraphs/name/protofire/makerdao-governance-v1_5'
+subgraph_api = 'https://api.thegraph.com/subgraphs/name/scottrepreneur/maker-governance'
 spells_query = """
 {
     spells {
         id
+        description
         casted
         castedWith
         lifted
@@ -23,6 +24,30 @@ archived_spell_titles = [
     {
         "id": "0x8e5f3abc36da63142275202454c11237f47dd170",
         "title": "Activate the Savings Rate Spread and the Sai and Dai Stability Fee Adjustments."
+    },
+    {
+        "id": "0xd24fbbb4497ad32308bda735683b55499ddc2cad",
+        "title": "Activate the Dai Debt Ceiling Adjustment, Set Dai Savings Rate Spread, Set Sai Stability Fee, Lower Surplus Auction Bid, Set Governance Delay Module"
+    },
+    {
+        "id": "0x333c0501182170c5002219380ded6b12c338e272",
+        "title": "2020-01-03 Weekly Executive: DSR & SF to 6%"
+    },
+    {
+        "id": "0xf44113760c4f70afeeb412c63bc713b13e6e202e",
+        "title": "2019-11-19 Weekly Executive: Adjust Debt Ceilings"
+    },
+    {
+       "id": "0xdd4aa99077c5e976afc22060eeafbbd1ba34eae9",
+       "title": "2019-12-13 Weekly Executive: Adjust OSM parameters" 
+    },
+    {
+        "id": "0x48916a2b11fa7a895426eedf9acf2d70523b1677",
+        "title": "2020-01-31 Weekly Executive: Adjust SF 9%, DSR 8.75%, Debt Ceilings"
+    },
+    {
+        "id": "0xde4000cb884b237efbd6f793584701230e1c45b3",
+        "title": "2019-07-19 Weekly Executive"
     }
 ]
 
@@ -35,7 +60,7 @@ def get_spells():
             spell['active'] = False
             spell['prev_cast'] = False
             spell['link'] = mkrgov_domain + 'executive/' + spell['id']
-            spell['title'] = spell['id']
+            spell['title'] = spell['description'] or spell['id']
         return spells
     else:
         raise Exception(f"Query failed to run by returning code of {response.status_code}. {spells_query}")
@@ -44,8 +69,8 @@ def all_spells():
     spells = get_spells()
     all_spells = []
     for spell in spells:
-        if float(spell['approvals']) > 50:
-            spell['approvals'] = str(round(float(spell['approvals']), 2))
+        if float(spell['approvals']) > 1000:
+            spell['approvals'] = f"{float(spell['approvals']):.2f}"
             all_spells.append(spell)
     
     return all_spells
@@ -112,6 +137,8 @@ def get_spell_titles(spells):
         for spell in spells:
             if title['id'].casefold() == spell['id'].casefold() and spell['title'] == spell['id']:
                 spell['title'] = title['title']
+    
+
 
     return spells
 

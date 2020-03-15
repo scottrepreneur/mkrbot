@@ -343,6 +343,23 @@ mkrbot_triggers = {
             'amd help'
         ]
     },
+    'easter_eggs': {
+        'moon': [
+            'moon',
+            'when moon',
+            'wen moon'
+        ],
+        'number_go_up': [
+            'up',
+            'number up'
+        ],
+        'rick': [
+            'rich',
+            'rick',
+            'roll',
+            'roll me baby one more time'
+        ]
+    },
     'lost': {
         'help': [
             'help',
@@ -412,6 +429,18 @@ Here are the [AMD]({AMD_LINK}) Resources you can request
 > Trade Dai: `amd trade`
 > Developer Resources: `amd dev`
 > Audits & Security: `amd audit`'''
+    },
+    'easter_egg': {
+        'moon': f'''
+#########################
+#:new_moon::new_moon:###########:new_moon::new_moon:#
+#:new_moon:##:new_moon:#######:new_moon:##:new_moon:#
+#:new_moon:####:new_moon:###:new_moon:####:new_moon:#
+#:new_moon:#####:new_moon:#:new_moon:#####:new_moon:#
+#:new_moon:#####:new_moon:#:new_moon:#####:new_moon:#
+#########################''',
+        'number_go_up': 'https://youtu.be/e5nyQmaq4k4?t=24',
+        'rick': 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
     },
     'lost': {
         'help': f'''
