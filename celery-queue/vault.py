@@ -62,7 +62,7 @@ def get_vault_by_id(message):
             vault_string = vault_string + f'Last Action: {action_name} at {time}\n'
 
         elif action['act'] == 'LOCK' or action['act'] == 'FREE':
-            amount = str(round(float(action['arg']),2)),
+            amount = str(round(float(action['arg']),2))
             vault_string = vault_string + f'Last Action: {action_name} {amount} ETH at {time}\n'
 
         elif action['act'] == 'DRAW' or action['act'] == 'WIPE':
@@ -74,9 +74,9 @@ def get_vault_by_id(message):
     # add owner
     vault_string = vault_string + f"Owner: {cup['lad']}"
 
-    # if it's closed, mention 'deleted' #? most CDPs aren't formally closed, just emptied
+    # if it's closed, mention 'deleted' #? most Vaults aren't formally closed, just emptied
     if cup['deleted']:
-        vault_string = vault_string + ' | _CDP is Closed_```'
+        vault_string = vault_string + ' | Vault is Closed```'
     else: 
         vault_string = vault_string + '```'
         
