@@ -27,7 +27,7 @@ def get_vault_by_id(message):
 
     id = cup['id']
 
-    vault_link = f"https://defiexplore.com/cdp/{str(id)}"
+    vault_link = f"https://mkr.tools/cdp/{str(id)}"
     vault_string = f'Vault ID: *[{str(id)}]({vault_link})*\n'
     
     if cup['ratio'] == '0' or cup['ratio'] == 0 or cup['ratio'] == None:
