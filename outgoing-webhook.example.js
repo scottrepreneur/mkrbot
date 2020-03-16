@@ -13,7 +13,7 @@ class Script {
         const webhook_token = 'SET_TOKEN';
 
     	let headers = {
-    		'verify_token': webhook_token
+    		'Authorization': 'Bearer ' + webhook_token
     	};
 
         if (request.data.bot) {

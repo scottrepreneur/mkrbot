@@ -353,7 +353,7 @@ mkrbot_triggers = {
             'up',
             'number up'
         ],
-        'rick': [
+        'rick_roll': [
             'rich',
             'rick',
             'roll',
@@ -430,7 +430,7 @@ Here are the [AMD]({AMD_LINK}) Resources you can request
 > Developer Resources: `amd dev`
 > Audits & Security: `amd audit`'''
     },
-    'easter_egg': {
+    'easter_eggs': {
         'moon': f'''
 #########################
 #:new_moon::new_moon:###########:new_moon::new_moon:#
@@ -440,7 +440,7 @@ Here are the [AMD]({AMD_LINK}) Resources you can request
 #:new_moon:#####:new_moon:#:new_moon:#####:new_moon:#
 #########################''',
         'number_go_up': 'https://youtu.be/e5nyQmaq4k4?t=24',
-        'rick': 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        'rick_roll': 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
     },
     'lost': {
         'help': f'''
