@@ -76,8 +76,12 @@ def forum_updates():
 
 	elif request.method == 'POST':
 		discourse_event = request.headers.get('x-discourse-event')
+		print(discourse_event)
 		if discourse_event == 'post_created':
 			celery.send_task('tasks.forum_update', args=[json.loads(request.data)], kwargs={})
+			return jsonify({'status':'success'}), 200
+		
+		else:
 			return jsonify({'status':'success'}), 200
 
 	else:

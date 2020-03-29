@@ -39,9 +39,17 @@ def process_message(self, user, message, channel, dm):
 @celery.task(name='tasks.forum_update', bind=True)
 def forum_update(self, data):
 	post = data['post']
+	print(post)
 
+	# production forum GaaG, LFW update
 	if post['topic_id'] == 84 and post['username'] == 'LongForWisdom' and post['post_number'] != 1:
-		forum_cross_post(post)
+		print('LFW updating GaaG')
+		forum_cross_post(post, False)
+
+	# staging forum GaaG, scottrepreneur update
+	elif post['topic_id'] == 15 and post['username'] == 'scott.herren1' and post['post_number'] != 1:
+		print('scooter update staging GaaG')
+		forum_cross_post(post, True)
 	
 	else:
 		print('not LFW updating GaaG')

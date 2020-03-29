@@ -8,8 +8,10 @@ import praw
 
 
 MAKER_FORUM_URL = 'https://forum.makerdao.com'
+STAGING_FORUM_URL = 'https://staging-forum.makerfoundation.com'
 ROCKETCHAT_URL = 'https://chat.makerdao.com'
 governance_at_a_glance_topic = 84
+test_gaag_topic = 15
 
 REDDIT_CLIENT_ID = os.getenv('REDDIT_CLIENT_ID')
 REDDIT_CLIENT_SECRET = os.getenv('REDDIT_CLIENT_SECRET')
@@ -22,12 +24,14 @@ reddit = praw.Reddit(
     client_secret=REDDIT_CLIENT_SECRET,
     password=REDDIT_BOT_PW,
     user_agent=BOT_USER_AGENT,
-    username=REDDIT_BOT_USER)
+    username=REDDIT_BOT_USER
+)
 
-def forum_cross_post(post):
+def forum_cross_post(post, test):
     
-
     response = requests.get(MAKER_FORUM_URL + f'/t/{governance_at_a_glance_topic}.json')
+    print(response.json())
+
     topic_body = response.json()['post_stream']['posts'][0]['cooked']
 
     soup = BeautifulSoup(topic_body, 'html.parser')
@@ -90,6 +94,7 @@ def forum_cross_post(post):
     for p in p_tags:
         p.unwrap()
 
+    # move to string manipulation 
     # clear extra * LFW is using for emphasis
     soup = str(soup).replace('***','**')
 
@@ -109,4 +114,7 @@ def forum_cross_post(post):
 
     #* post to reddit api in r/makerdao
 
-    reddit.subreddit('makerdao').submit(f'Governance at a Glance {datetime.now().strftime("%d/%m/%y")}', selftext=soup)
+    if not test:
+        reddit.subreddit('makerdao').submit(f'Governance at a Glance - {datetime.now().strftime("%d/%m/%y")}', selftext=soup)
+    else:
+        reddit.subreddit('scottrepreneur').submit(f'Governance at a Glance - {datetime.now().strftime("%d/%m/%y")}', selftext=soup)
