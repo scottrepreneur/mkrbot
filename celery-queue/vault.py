@@ -1,84 +1,92 @@
-
 import os
-import locale
+import re
+import json
 from datetime import datetime
 from dateutil.parser import parse
 import requests
 
-MAKER_GRAPH_URL = os.getenv('MAKER_GRAPH_URL')
-
-locale.setlocale(locale.LC_ALL, 'en_US')
+MCD_VAULT_URL = os.getenv('MCD_VAULT_URL')
 
 def get_vault_by_id(message):
+
+    vault_id = message.split(' ')[1]
+    response = requests.get(f'{MCD_VAULT_URL}/api/cdps/{vault_id}')
+    actions = requests.get(f'{MCD_VAULT_URL}/api/cdps/{vault_id}/events')
+
+    print(response.json())
+    print(actions.json())
+    data = response.json()
+
+    vault_link = f"https://defiexplore.com/cdp/{vault_id}"
+    vault_string = f'Vault ID: *[{data["cdpId"]}]({vault_link})*\n'
     
-    ## VAULT LOOKUP MESSAGE ##
-    # ```VAULT ID: {ID} | Collateralization Ratio: {RATIO}
-    # Outstanding Dai: {ART} Collateral Locked: {INK} (${INK_USD})
-    # Last Action: {ACTION} {AMOUNT} at {TIME}
-    # Owner: {LAD} {DELETED}
-    # ````
-
-    vault = message.split(' ')[1]
-
-    get_vault_query = f"{{ getCup(id: {str(vault)}) {{art,block,deleted,id,ink,ire,lad,pip,ratio,tab,time,actions {{nodes {{act,arg,time,pip}}}}}}}}"
-    response = requests.post(MAKER_GRAPH_URL, json={'query': get_vault_query})
-    cup = response.json()['data']['getCup']
-    print(cup)
-
-    id = cup['id']
-
-    vault_link = f"https://mkr.tools/cdp/{str(id)}"
-    vault_string = f'Vault ID: *[{str(id)}]({vault_link})*\n'
-    
-    if cup['ratio'] == '0' or cup['ratio'] == 0 or cup['ratio'] == None:
+    if data['ratio'] == '0' or data['ratio'] == 0 or data['ratio'] == None:
         vault_string = vault_string + '```Collateralization Ratio: 0%\n'
     else:
-        ratio = str(round(float(cup['ratio']),2))
-        vault_string = vault_string + f'```Collateralization Ratio: {ratio}%\n'
+        vault_string = vault_string + f'```Collateralization Ratio: {float(data["ratio"])*100:.2f}%\n'
+    
+    if data['liqPrice'] == '0' or data['liqPrice'] == 0 or data['liqPrice'] == None:
+        vault_string = vault_string + '```Liquidation Price: $0\n'
+    else:
+        vault_string = vault_string + f'```Liquidation Price: {float(data["liqRatio"])*100:.2f}%\n'
     
     # add outstanding dai
-    if cup['art'] == '0' or cup['art'] == 0 or cup['art'] == None:
+    if data['debt'] == '0' or data['debt'] == 0 or data['debt'] == None:
         vault_string = vault_string + 'Dai Drawn: 0 Dai | '
     else:
-        art = str(round(float(cup['art']),2))
-        vault_string = vault_string + f'Dai Drawn: {art} Dai | '
+        vault_string = vault_string + f'Dai Drawn: {float(data["debt"]):.2f} Dai | '
 
     # add collateral locked
-    if cup['ink'] == '0' or cup['ink'] == 0 or cup['ink'] == None:
+    if data['collateral'] == '0' or data['collateral'] == 0 or data['collateral'] == None:
         vault_string = vault_string + 'Collateral: 0 ETH (~$0)\n'
     else:
-        ink = str(round(float(cup['ink']),2))
-        ink_usd = str(round(float(cup['ink']) * float(cup['pip']),2))
-        vault_string = vault_string + f'Collateral: {ink} ETH (~${ink_usd})\n'
+        ink = float(data['collateral'])
+        ink_usd = ink * float(data['collateralUSD'])
+        vault_string = vault_string + f'Collateral: {ink:.2f} ETH (~${ink_usd:.2f})\n'
     
     # add last action
-    for action in cup['actions']['nodes']:
+    last_action = {}
+    if len(actions.json()) > 1:
+        for action in actions.json():
+            print(f"current: {action['blockNum']} and last: {last_action['blockNum']}")
+            if last_action == {}:
+                last_action = action
+
+            else:
+                if action['blockNum'] > last_action['blockNum']:
+                    last_action = action
+    else:
+        last_action = actions.json()[0]
+
+    if last_action is not {}:
         # if ":" == action['time'][-3:-2]:
         #     action['time'] = action['time'][:-3] + action['time'][-2:]
-        action_name = action['act'].capitalize()
-        time = str(parse(action['time']).strftime('%b %d, %Y at %H:%M%p %Z'))
+        time = str(parse(last_action['timestamp']).strftime('%b %d, %Y at %H:%M%p %Z'))
 
-        if action['act'] == 'SHUT' or action['act'] == 'OPEN':
-            vault_string = vault_string + f'Last Action: {action_name} at {time}\n'
+        if last_action['actionType'] == 'Create':
+            vault_string = vault_string + f'Created vault on {time}\n'
 
-        elif action['act'] == 'LOCK' or action['act'] == 'FREE':
-            amount = str(round(float(action['arg']),2))
-            vault_string = vault_string + f'Last Action: {action_name} {amount} ETH at {time}\n'
+        elif last_action['actionType'] == 'add-collateral':
+            amount = float(action['collateral'])
+            vault_string = vault_string + f'Added {amount:.2f} {action["type"]} on {time}\n'
 
-        elif action['act'] == 'DRAW' or action['act'] == 'WIPE':
-            amount = str(round(float(action['arg']),2))
-            vault_string = vault_string + f'Last Action: {action_name} {amount} Dai at {time}\n'
+        elif last_action['actionType'] == 'withdraw-collateral':
+            amount = abs(float(action['collateral']))
+            vault_string = vault_string + f'Added Collateral {amount:.2f} {action["type"]} on {time}\n'
 
-        break
-        
+        elif last_action['actionType'] == 'generate-dai':
+            amount = float(action['debt'])
+            vault_string = vault_string + f'Generated {amount:.2f} Dai on {time}\n'
+
+        elif last_action['actionType'] == 'payback-dai':
+            amount = abs(float(action['debt']))
+            vault_string = vault_string + f'Paid back {amount:.2f} Dai on {time}\n'
+
+        else:
+            vault_string = vault_string + f'Last Action: {action["action-type"]} on {time}\n'
+
     # add owner
-    vault_string = vault_string + f"Owner: {cup['lad']}"
-
-    # if it's closed, mention 'deleted' #? most Vaults aren't formally closed, just emptied
-    if cup['deleted']:
-        vault_string = vault_string + ' | Vault is Closed```'
-    else: 
-        vault_string = vault_string + '```'
+    vault_string = vault_string + f"Owner: {data['userAddr']}"
         
     return vault_string
     

@@ -4,6 +4,7 @@ import difflib
 from rocket import rocket
 
 from check_hat import check_spells
+from cdp import get_cdp_by_id
 from vault import get_vault_by_id
 from mkrgov import print_spells, mkrgov_domain
 
@@ -11,8 +12,8 @@ MAKER_COMMUNITY_PORTAL = os.getenv('MAKER_COMMUNITY_PORTAL')
 AMD_LINK = "https://awesome.makerdao.com"
 DEV_DOCS_LINK = "https://developer.makerdao.com"
 OASIS_LINK = "https://oasis.app"
-MKRBOT_GUIDE_URL = "https://www.github.com/scottrepreneur/mkrbot/mkrbot_guide.md"
-CONTRIBUTING_URL = "https://www.github.com/scottrepreneur/mkrbot/CONTRIBUTING.md"
+MKRBOT_GUIDE_URL = "https://www.github.com/scottrepreneur/mkrbot/blob/master/mkrbot_guide.md"
+CONTRIBUTING_URL = "https://www.github.com/scottrepreneur/mkrbot/blob/master/CONTRIBUTING.md"
 CREATOR_DM_URL = "https://chat.makerdao.com/direct/scottrepreneur"
 
 ENVIRONMENT = os.getenv('ENVIRONMENT')
@@ -48,8 +49,10 @@ mkrbot_triggers = {
             'mkr per spells',
             'mkr per spell'
         ],
+        'check_cdp':[
+            'cdp [0-9]'
+        ],
         'check_vault':[
-            'cdp [0-9]',
             'vault [0-9]'
         ]
     },
@@ -504,6 +507,11 @@ def mkrbot_message(user, message, channel):
                             if re.compile(sub).match(message):
                                 command_found = True
                                 bot_response(user, get_vault_by_id(message), channel, False)
+                        
+                        elif query == 'check_cdp':
+                            if re.compile(sub).match(message):
+                                command_found = True
+                                bot_response(user, get_cdp_by_id(message), channel, False)
         
         # don't send two commands
         if command_found:
