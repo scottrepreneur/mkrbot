@@ -116,3 +116,5 @@ coverage*
 .env
 .vscode/
 nginx/
+/misc
+/.dev.env
