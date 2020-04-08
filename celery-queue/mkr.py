@@ -12,5 +12,21 @@ def mkr_burned():
     mkr_burner = burned['mkr_in_burner']
     mkr_price = burned['mkr_price']
 
-    return f'''MKR Total Supply: {total_mkr:,.2f} | MKR Price: ${mkr_price:.2f}
-MKR Burned: {mkr_burned:,.2f} | MKR in Burner: {mkr_burner:,.2f}'''
+    return f''':mkr: Total Supply: {total_mkr:,.2f} | :mkr: Price: ${mkr_price:.2f}
+:mkr: Burned: {mkr_burned:,.2f} | :mkr: in Burner: {mkr_burner:,.2f}'''
+
+def stability_fees():
+
+    fees = requests.get(BURNED_URL).json()
+
+    mcd_fee_eth = fees['mcd_fee_eth']
+    mcd_fee_bat = fees['mcd_fee_bat']
+    mcd_fee_usdc = fees['mcd_fee_usdc']
+
+    apr_eth = (mcd_fee_eth ** (60 * 60 * 24 * 365) - 1) * 100
+    apr_bat = (mcd_fee_bat ** (60 * 60 * 24 * 365) - 1) * 100
+    apr_usdc = (mcd_fee_usdc ** (60 * 60 * 24 * 365) - 1) * 100
+
+    return f'''*Stability Fees* 
+Annual Percentage Rate | :eth:: {apr_eth:.2f}%
+:battoken:: {apr_bat:.2f}% | :usdc:: {apr_usdc:.2f}%'''

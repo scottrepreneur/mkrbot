@@ -19,8 +19,21 @@ def dai_supply():
     total_sai = burned['sai_total']
     sai_cap = burned['scd_sai_cap']
 
-    return f'''All :dai:: {total_dai:,.0f} / {dai_cap/1000000:,}MM ({total_dai/dai_cap*100:.0f}%) | :dai: from ETH: {dai_from_eth:,.0f} / {eth_dai_cap/1000000:,}MM ({dai_from_eth/eth_dai_cap*100:.0f}%)
-:dai: from BAT: {dai_from_bat:,.0f} / {bat_dai_cap/1000000:,}MM ({dai_from_bat/bat_dai_cap*100:.0f}%) | :dai: from USDC: {dai_from_usdc:,.0f} / {usdc_dai_cap/1000000:,}MM ({dai_from_usdc/usdc_dai_cap*100:.0f}%)
-:sai:: {total_sai:,.0f} / {sai_cap/1000000:,}MM ({total_sai/sai_cap*100:.0f}%) | [Check out more details on MkrBurn]({MKR_BURN_URL})'''
+    return f'''
+All :dai:: {total_dai:,.0f} / {dai_cap/1000000:,}MM ({total_dai/dai_cap*100:.0f}%) | :dai: from :eth:: {dai_from_eth:,.0f} / {eth_dai_cap/1000000:,}MM ({dai_from_eth/eth_dai_cap*100:.0f}%)
+:dai: from :battoken:: {dai_from_bat:,.0f} / {bat_dai_cap/1000000:,}MM ({dai_from_bat/bat_dai_cap*100:.0f}%) | :dai: from :usdc:: {dai_from_usdc:,.0f} / {usdc_dai_cap/1000000:,}MM ({dai_from_usdc/usdc_dai_cap*100:.0f}%)
+:sai:: {total_sai:,.0f} / {sai_cap/1000000:,}MM ({total_sai/sai_cap*100:.0f}%) | [Check out more details on Makerburn]({MKR_BURN_URL})'''
 
-print(dai_supply())
+def dsr_overview():
+
+    dsr = requests.get(BURNED_URL).json()
+
+    dsr_apr = (dsr['dsr_rate'] ** (60 * 60 * 24 * 365) - 1) * 100
+    dai_in_dsr = dsr['dai_in_dsr']
+    total_dai = dsr['dai_total']
+
+
+    return f'''
+:dai: Savings Rate: {dsr_apr}% | :dai: in DSR: {dai_in_dsr:,.0f}
+DSR Utilization: {dai_in_dsr/total_dai*100:.2f}% | Total :dai:: {total_dai:,.0f}
+'''

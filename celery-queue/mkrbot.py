@@ -7,8 +7,8 @@ from triggers import mkrbot_triggers
 from responses import mkrbot_responses
 
 from cdp import get_cdp_by_id
-from dai import dai_supply
-from mkr import mkr_burned
+from dai import dai_supply, dsr_overview
+from mkr import mkr_burned, stability_fees
 from mkrgov import print_spells, mkrgov_domain
 from vault import get_vault_by_id
 
@@ -78,6 +78,16 @@ def mkrbot_message(user, message, channel):
                             if message.casefold() == sub.casefold():
                                 command_found = True
                                 bot_response(user, dai_supply(), channel, False)
+                        
+                        elif query == 'stability_fee':
+                            if message.casefold() == sub.casefold():
+                                command_found = True
+                                bot_response(user, stability_fees(), channel, False)
+
+                        elif query == 'dsr_overview':
+                            if message.casefold() == sub.casefold():
+                                command_found = True
+                                bot_response(user, dsr_overview(), channel, False)
         
         # don't send two commands
         if command_found:

@@ -38,6 +38,18 @@ mkrbot_triggers = {
             'outstanding dai supply',
             'outstanding supply',
             'supply dai'
+        ],
+        'stability_fee': [
+            'stability',
+            'stabilityfee',
+            'sf',
+            'stability fee',
+            'fees',
+            'stability fees'
+        ],
+        'dsr_overview': [
+            'dsr',
+            'dsr overview'
         ]
     },
     'query_help': {
