@@ -10,6 +10,7 @@ from cdp import get_cdp_by_id
 from dai import dai_supply, dsr_overview
 from mkr import mkr_burned, stability_fees
 from mkrgov import print_spells, mkrgov_domain
+from prices import price_overview, eth_price, bat_price, usdc_price
 from vault import get_vault_by_id
 
 ENVIRONMENT = os.getenv('ENVIRONMENT')
