@@ -31,25 +31,25 @@ def get_cdp_by_id(message):
     cdp_string = f'CDP ID: *[{str(id)}]({cdp_link})*\n'
     
     if cup['ratio'] == '0' or cup['ratio'] == 0 or cup['ratio'] == None:
-        cdp_string = cdp_string + '```Collateralization Ratio: 0%\n'
+        cdp_string = cdp_string + '> Collateralization Ratio: 0%\n'
     else:
         ratio = str(round(float(cup['ratio']),2))
-        cdp_string = cdp_string + f'```Collateralization Ratio: {ratio}%\n'
+        cdp_string = cdp_string + f'> Collateralization Ratio: {ratio}%\n'
     
     # add outstanding dai
     if cup['art'] == '0' or cup['art'] == 0 or cup['art'] == None:
-        cdp_string = cdp_string + 'Dai Drawn: 0 Dai | '
+        cdp_string = cdp_string + '> Drawn: 0 :dai: | '
     else:
         art = str(round(float(cup['art']),2))
-        cdp_string = cdp_string + f'Dai Drawn: {art} Dai | '
+        cdp_string = cdp_string + f'> Drawn: {art} :dai: | '
 
     # add collateral locked
     if cup['ink'] == '0' or cup['ink'] == 0 or cup['ink'] == None:
-        cdp_string = cdp_string + 'Collateral: 0 ETH (~$0)\n'
+        cdp_string = cdp_string + 'Collateral: 0 :eth: (~$0)\n'
     else:
         ink = str(round(float(cup['ink']),2))
         ink_usd = str(round(float(cup['ink']) * float(cup['pip']),2))
-        cdp_string = cdp_string + f'Collateral: {ink} ETH (~${ink_usd})\n'
+        cdp_string = cdp_string + f'Collateral: {ink} :eth: (~${ink_usd})\n'
     
     # add last action
     for action in cup['actions']['nodes']:
@@ -59,26 +59,24 @@ def get_cdp_by_id(message):
         time = str(parse(action['time']).strftime('%b %d, %Y at %H:%M%p %Z'))
 
         if action['act'] == 'SHUT' or action['act'] == 'OPEN':
-            cdp_string = cdp_string + f'Last Action: {action_name} at {time}\n'
+            cdp_string = cdp_string + f'> Last Action: {action_name} at {time}\n'
 
         elif action['act'] == 'LOCK' or action['act'] == 'FREE':
             amount = str(round(float(action['arg']),2))
-            cdp_string = cdp_string + f'Last Action: {action_name} {amount} ETH at {time}\n'
+            cdp_string = cdp_string + f'> Last Action: {action_name} {amount} :eth: at {time}\n'
 
         elif action['act'] == 'DRAW' or action['act'] == 'WIPE':
             amount = str(round(float(action['arg']),2))
-            cdp_string = cdp_string + f'Last Action: {action_name} {amount} Dai at {time}\n'
+            cdp_string = cdp_string + f'> Last Action: {action_name} {amount} :dai: at {time}\n'
 
         break
         
     # add owner
-    cdp_string = cdp_string + f"Owner: {cup['lad']}"
+    cdp_string = cdp_string + f"> Owner: {cup['lad']}"
 
     # if it's closed, mention 'deleted' #? most cdps aren't formally closed, just emptied
     if cup['deleted']:
-        cdp_string = cdp_string + ' | cdp is Closed```'
-    else: 
-        cdp_string = cdp_string + '```'
+        cdp_string = cdp_string + ' | cdp is Closed'
         
     return cdp_string
     

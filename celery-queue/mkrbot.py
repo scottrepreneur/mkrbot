@@ -7,7 +7,7 @@ from triggers import mkrbot_triggers
 from responses import mkrbot_responses
 
 from cdp import get_cdp_by_id
-from dai import dai_supply, dsr_overview
+from dai import dai_supply, dsr_overview, system_overview
 from mkr import mkr_burned, stability_fees
 from mkrgov import print_spells, mkrgov_domain
 from prices import price_overview, eth_price, bat_price, usdc_price
@@ -89,6 +89,32 @@ def mkrbot_message(user, message, channel):
                             if message.casefold() == sub.casefold():
                                 command_found = True
                                 bot_response(user, dsr_overview(), channel, False)
+
+                        elif query == 'price_overview':
+                            if message.casefold() == sub.casefold():
+                                command_found = True
+                                bot_response(user, price_overview(), channel, False)
+                        
+                        elif query == 'eth_price':
+                            if message.casefold() == sub.casefold():
+                                command_found = True
+                                bot_response(user, eth_price(), channel, False)
+
+                        elif query == 'bat_price':
+                            if message.casefold() == sub.casefold():
+                                command_found = True
+                                bot_response(user, bat_price(), channel, False)
+                        
+                        elif query == 'usdc_price':
+                            if message.casefold() == sub.casefold():
+                                command_found = True
+                                bot_response(user, usdc_price(), channel, False)
+                        
+                        elif query == 'system_overview':
+                            if message.casefold() == sub.casefold():
+                                command_found = True
+                                bot_response(user, system_overview(), channel, False)
+
         
         # don't send two commands
         if command_found:

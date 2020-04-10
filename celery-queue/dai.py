@@ -3,11 +3,11 @@ import requests
 
 BURNED_URL = os.getenv('BURNED_URL')
 MKR_BURN_URL = 'https://makerburn.com'
-EXPLORE_URL = os.getenv('EXPLORE_URL')
+MCD_VAULT_URL = os.getenv('MCD_VAULT_URL')
 
 def system_overview():
 
-    explore = requests.get(f'{EXPLORE_URL}/api/stats/globalInfo').json()
+    explore = requests.get(f'{MCD_VAULT_URL}/api/stats/globalInfo').json()
     burned = requests.get(BURNED_URL).json()
 
     total_dai = burned['dai_total']

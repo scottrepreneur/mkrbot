@@ -50,11 +50,42 @@ mkrbot_triggers = {
         'dsr_overview': [
             'dsr',
             'dsr overview'
+        ],
+        'price_overview': [
+            'prices',
+            'all prices',
+            'prices all'
+        ],
+        'eth_price': [
+            'eth price',
+            'price eth',
+            'eth prices',
+            'prices eth'
+        ],
+        'bat_price': [
+            'bat price',
+            'price bat',
+            'bat prices',
+            'prices bat'
+        ],
+        'usdc_price': [
+            'usdc price',
+            'price usdc',
+            'usdc prices',
+            'prices usdc'
+        ],
+        'system_overview': [
+            'dss',
+            'dss overview',
+            'system overview',
+            'dai overview',
+            'maker overview'
         ]
     },
     'query_help': {
         'spells_help': [
             'spell help',
+            'spells help',
             'chief spells help',
             'spell count help',
             'spells count help',

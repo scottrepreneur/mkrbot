@@ -23,6 +23,5 @@ def stability_fees():
     apr_bat = (fees['mcd_fee_bat'] ** (60 * 60 * 24 * 365) - 1) * 100
     apr_usdc = (fees['mcd_fee_usdc'] ** (60 * 60 * 24 * 365) - 1) * 100
 
-    return f'''*Stability Fees* 
-Annual Percentage Rate | :eth:: {apr_eth:.2f}%
-:battoken:: {apr_bat:.2f}% | :usdc:: {apr_usdc:.2f}%'''
+    return f'''*Stability Fees* | Annual Percentage Rate
+:eth:: {apr_eth:.2f}% | :battoken:: {apr_bat:.2f}% | :usdc:: {apr_usdc:.2f}%'''
