@@ -14,3 +14,4 @@ rocket-python==1.2.11
 tornado==5.0.2
 vine==1.1.4
 web3==4.8.0
+gql==0.4.0

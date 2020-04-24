@@ -15,10 +15,10 @@ def price_overview():
     next_usdc_price = float(prices['usdcFuturePrice'])
 
     return f'''
-:eth: Next: ${next_eth_price:.2f} | Current: ${eth_price:.2f}
-:battoken: Next: ${next_bat_price:.2f} | Current: ${bat_price:.2f}
-:usdc: Next: ${next_usdc_price:.2f} | Current: ${usdc_price:.2f}
-:mkr: Next: [Pending] | Current: [Pending]
+> :eth: Next: ${next_eth_price:.2f} | Current: ${eth_price:.2f}
+> :battoken: Next: ${next_bat_price:.2f} | Current: ${bat_price:.2f}
+> :usdc: Next: ${next_usdc_price:.2f} | Current: ${usdc_price:.2f}
+> :mkr: Next: [Pending] | Current: [Pending]
 '''
 
 def eth_price():
@@ -29,7 +29,7 @@ def eth_price():
     next_eth_price = float(prices['ethFuturePrice'])
 
     return f'''
-:eth: Next: ${next_eth_price:.2f} | Current: ${eth_price:.2f}
+> :eth: Next: ${next_eth_price:.2f} | Current: ${eth_price:.2f}
 '''
 
 def bat_price():
@@ -40,7 +40,7 @@ def bat_price():
     next_bat_price = float(prices['batFuturePrice'])
 
     return f'''
-:battoken: Next: ${next_bat_price:.2f} | Current: ${bat_price:.2f}
+> :battoken: Next: ${next_bat_price:.2f} | Current: ${bat_price:.2f}
 '''
 
 def usdc_price():
@@ -51,5 +51,5 @@ def usdc_price():
     next_usdc_price = float(prices['usdcFuturePrice'])
 
     return f'''
-:usdc: Next: ${next_usdc_price:.2f} | Current: ${usdc_price:.2f}
+> :usdc: Next: ${next_usdc_price:.2f} | Current: ${usdc_price:.2f}
 '''

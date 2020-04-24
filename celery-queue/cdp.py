@@ -41,7 +41,7 @@ def get_cdp_by_id(message):
         cdp_string = cdp_string + '> Drawn: 0 :dai: | '
     else:
         art = str(round(float(cup['art']),2))
-        cdp_string = cdp_string + f'> Drawn: {art} :dai: | '
+        cdp_string = cdp_string + f'> Drawn: {art:,.2f} :dai: | '
 
     # add collateral locked
     if cup['ink'] == '0' or cup['ink'] == 0 or cup['ink'] == None:
@@ -49,7 +49,7 @@ def get_cdp_by_id(message):
     else:
         ink = str(round(float(cup['ink']),2))
         ink_usd = str(round(float(cup['ink']) * float(cup['pip']),2))
-        cdp_string = cdp_string + f'Collateral: {ink} :eth: (~${ink_usd})\n'
+        cdp_string = cdp_string + f'Collateral: {ink:,.2f} :eth: (~${ink_usd:,.0f})\n'
     
     # add last action
     for action in cup['actions']['nodes']:
@@ -63,11 +63,11 @@ def get_cdp_by_id(message):
 
         elif action['act'] == 'LOCK' or action['act'] == 'FREE':
             amount = str(round(float(action['arg']),2))
-            cdp_string = cdp_string + f'> Last Action: {action_name} {amount} :eth: at {time}\n'
+            cdp_string = cdp_string + f'> Last Action: {action_name} {amount:,.0f} :eth: at {time}\n'
 
         elif action['act'] == 'DRAW' or action['act'] == 'WIPE':
             amount = str(round(float(action['arg']),2))
-            cdp_string = cdp_string + f'> Last Action: {action_name} {amount} :dai: at {time}\n'
+            cdp_string = cdp_string + f'> Last Action: {action_name} {amount:,.0f} :dai: at {time}\n'
 
         break
         

@@ -1,21 +1,34 @@
 import os
 import time
 from celery import Celery
+from celery.schedules import crontab
 
 from rocket import approved_channels, channels
-from mkrbot import mkrbot_names, mkrbot_triggers, mkrbot_message
+from mkrbot import mkrbot_names, mkrbot_triggers, mkrbot_message, bot_response
 from reddit import forum_cross_post
+from prices import price_overview
+from gov_updates import check_new_spell, check_cast_spell, check_new_poll
 
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379'),
 CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'redis://localhost:6379')
 
 celery = Celery('tasks', broker=CELERY_BROKER_URL, backend=CELERY_RESULT_BACKEND)
 
+@celery.on_after_configure.connect
+def setup_periodic_tasks(sender, **kwargs):
+	# send prices every hour
+	sender.add_periodic_task(crontab(hour='*'), schedule_prices.s(), name='send hourly price updates to rocketchat')
+	# check for new spells every 15 minutes
+	sender.add_periodic_task(crontab(minute='*/15'), check_new_spell.s(), name='check for new spells every 15 minutes')
+	# check for cast spells every 15 minutes
+	sender.add_periodic_task(crontab(minute='*/15'), check_cast_spell.s(), name='check for new spells every 15 minutes')
+	# check for new governance polls every 15 minutes
+	sender.add_periodic_task(crontab(minute='*/15'), check_cast_spell.s(), name='check for new spells every 15 minutes')
 
-@celery.task(name='tasks.add')
-def add(x: int, y: int) -> int:
-    time.sleep(5)
-    return x + y
+
+@celery.task(name='tasks.schedule_prices')
+def schedule_prices():
+    bot_response('user', price_overview(), channels['chakachat'], False)
 
 @celery.task(name='tasks.process_message', bind=True)
 def process_message(self, user, message, channel, dm):

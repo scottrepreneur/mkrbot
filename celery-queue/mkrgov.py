@@ -3,6 +3,7 @@ import requests
 
 gov_cms_api = 'https://cms-gov.makerfoundation.com/content/governance-dashboard?network=mainnet'
 subgraph_api = 'https://api.thegraph.com/subgraphs/name/scottrepreneur/maker-governance'
+mkrgov_domain = 'https://mkrgov.science/'
 spells_query = '''
 {
     spells {
@@ -19,41 +20,20 @@ spells_query = '''
     }
 }
 '''
-mkrgov_domain = 'https://mkrgov.science/'
-archived_spell_titles = [
-    {
-        'id': '0x8e5f3abc36da63142275202454c11237f47dd170',
-        'title': 'Activate the Savings Rate Spread and the Sai and Dai Stability Fee Adjustments.'
-    },
-    {
-        'id': '0xd24fbbb4497ad32308bda735683b55499ddc2cad',
-        'title': 'Activate the Dai Debt Ceiling Adjustment, Set Dai Savings Rate Spread, Set Sai Stability Fee, Lower Surplus Auction Bid, Set Governance Delay Module'
-    },
-    {
-        'id': '0x333c0501182170c5002219380ded6b12c338e272',
-        'title': '2020-01-03 Weekly Executive: DSR & SF to 6%'
-    },
-    {
-        'id': '0xf44113760c4f70afeeb412c63bc713b13e6e202e',
-        'title': '2019-11-19 Weekly Executive: Adjust Debt Ceilings'
-    },
-    {
-        'id': '0xdd4aa99077c5e976afc22060eeafbbd1ba34eae9',
-        'title': '2019-12-13 Weekly Executive: Adjust OSM parameters' 
-    },
-    {
-        'id': '0x48916a2b11fa7a895426eedf9acf2d70523b1677',
-        'title': '2020-01-31 Weekly Executive: Adjust SF 9%, DSR 8.75%, Debt Ceilings'
-    },
-    {
-        'id': '0xde4000cb884b237efbd6f793584701230e1c45b3',
-        'title': '2019-07-19 Weekly Executive'
-    },
-    {
-        'id': '0xd77ad957fcF536d13A17f5D1FfFA3987F83376cf',
-        'title': 'Adjust Risk Parameters, Governance Security Module and Liquidation Freeze Module'
+polls_query = '''
+{
+    polls {
+        id
+        creator
+        url
+        pollId
+        startDate
+        endDate
+        votesCount
     }
-]
+}
+
+'''
 
 def get_spells():
     response = requests.post(subgraph_api, json={'query': spells_query})
@@ -69,6 +49,26 @@ def get_spells():
     else:
         raise Exception(f"Query failed to run by returning code of {response.status_code}. {spells_query}")
 
+def get_polls():
+    response = requests.post(subgraph_api, json={'query': polls_query})
+    if response.status_code == 200:
+        polls = response.json()['data']['polls']
+        return polls
+
+def get_poll_title(poll):
+    if not 'title' in poll.keys():
+        if poll['url'] != 'test' and poll['url'][len(poll['url']) - 3:] == '.md':
+            response = requests.get(poll['url'])
+            poll_description = response.content.decode("utf-8")
+
+            i1 = poll_description.find('title: ')
+            i2 = poll_description.find('summary:')
+            poll['title'] = poll_description[i1+7:i2 - 1]
+
+    return poll['title']
+
+# print(get_poll_titles(get_polls()))
+
 def all_spells():
     spells = get_spells()
     all_spells = []
@@ -76,7 +76,7 @@ def all_spells():
         if float(spell['approvals']) > 1000:
             spell['approvals'] = f"{float(spell['approvals']):.2f}"
             all_spells.append(spell)
-    
+
     return all_spells
 
 def set_hat(spells):
@@ -91,16 +91,16 @@ def set_hat(spells):
             if float(spell['approvals']) > float(hat['approvals']):
                 index_of_hat = index
                 hat = spell
-                
+
     spells[index_of_hat]['hat'] = True
-    
+
     return spells
 
 def set_active(spells):
     for spell in spells:
         if not spell['casted']:
             spell['active'] = True
-    
+
     return spells
 
 def previous_spell(spells):
@@ -125,9 +125,9 @@ def get_active_spells():
     for spell in active_spells:
         if spell['active'] == True:
             active_spells.append(spell)
-        
+
     return active_spells
-    
+
 def get_spell_titles(spells):
     gov_cms_data = requests.get(gov_cms_api).json()
 
@@ -137,12 +137,12 @@ def get_spell_titles(spells):
                 if proposal['source'].casefold() == spell['id'].casefold():
                     spell['title'] = proposal['title']
 
-    for title in archived_spell_titles:
+    with open('./spells.json') as json_file:
+        spells_data = json.load(json_file)
+    for _spell in spells_data:
         for spell in spells:
-            if title['id'].casefold() == spell['id'].casefold() and spell['title'] == spell['id']:
-                spell['title'] = title['title']
-    
-
+            if _spell['id'].casefold() == spell['id'].casefold() and spell['title'] == spell['id']:
+                spell['title'] = _spell['title']
 
     return spells
 

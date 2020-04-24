@@ -531,7 +531,6 @@ mkrbot_triggers = {
             'what is the dai peg?',
             'what is the dai peg',
             'dai peg',
-            'what is the peg?',
             'what is peg'
         ],
         'price_feed_delay': [
@@ -839,7 +838,15 @@ mkrbot_triggers = {
         'help': [
             'help',
             'i need help',
-            'help me'
+            'help me',
+            'commands',
+            'tell me what you do',
+            'what do you do',
+            'what do you do?',
+            'who are you',
+            'who are you?',
+            'what are you doing',
+            'what are you doing?'
         ]
     }
 }

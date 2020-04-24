@@ -35,10 +35,10 @@ def system_overview():
 
     # add -> :dai: Sent (24 hrs): [Pending] | 
     return f'''
-Total :dai:: {total_dai:,.1f} | DSR: {dsr_apr:.2f}% | :honey_pot: {dai_in_dsr:,.2f}
-Collateral Value Locked: ${total_collateral_value:,.2f} ({total_collateral_value/total_dai*100:.2f}%)
-Locked: :eth:: {eth_locked:,.1f} ({eth_perc:.0f}%) | :battoken:: {bat_locked:,.1f} ({bat_perc:.0f}%) | :usdc:: {usdc_locked:,.1f} ({usdc_perc:.0f}%)
-Fee: :eth:: {apr_eth:.2f}% | :battoken:: {apr_bat:.2f}% | :usdc:: {apr_usdc:.2f}% | :mkr:: {mkr_total:,.1f}
+> Total :dai:: {total_dai:,.1f} | DSR: {dsr_apr:.2f}% | :honey_pot: {dai_in_dsr:,.2f}
+> Collateral Value Locked: ${total_collateral_value:,.2f} ({total_collateral_value/total_dai*100:.2f}%)
+> Locked: :eth:: {eth_locked:,.1f} ({eth_perc:.0f}%) | :battoken:: {bat_locked:,.1f} ({bat_perc:.0f}%) | :usdc:: {usdc_locked:,.1f} ({usdc_perc:.0f}%)
+> Fee: :eth:: {apr_eth:.2f}% | :battoken:: {apr_bat:.2f}% | :usdc:: {apr_usdc:.2f}% | :mkr:: {mkr_total:,.1f}
 '''   
 
 def dai_supply():
@@ -57,9 +57,9 @@ def dai_supply():
     sai_cap = burned['scd_sai_cap']
 
     return f'''
-All :dai:: {total_dai:,.0f} / {dai_cap/1000000:,}MM ({total_dai/dai_cap*100:.0f}%) | :dai: from :eth:: {dai_from_eth:,.0f} / {eth_dai_cap/1000000:,}MM ({dai_from_eth/eth_dai_cap*100:.0f}%)
-:dai: from :battoken:: {dai_from_bat:,.0f} / {bat_dai_cap/1000000:,}MM ({dai_from_bat/bat_dai_cap*100:.0f}%) | :dai: from :usdc:: {dai_from_usdc:,.0f} / {usdc_dai_cap/1000000:,}MM ({dai_from_usdc/usdc_dai_cap*100:.0f}%)
-:sai:: {total_sai:,.0f} / {sai_cap/1000000:,}MM ({total_sai/sai_cap*100:.0f}%) | [Check out more details on Makerburn]({MKR_BURN_URL})'''
+> All :dai:: {total_dai:,.0f} / {dai_cap/1000000:,}MM ({total_dai/dai_cap*100:.0f}%) | :dai: from :eth:: {dai_from_eth:,.0f} / {eth_dai_cap/1000000:,}MM ({dai_from_eth/eth_dai_cap*100:.0f}%)
+> :dai: from :battoken:: {dai_from_bat:,.0f} / {bat_dai_cap/1000000:,}MM ({dai_from_bat/bat_dai_cap*100:.0f}%) | :dai: from :usdc:: {dai_from_usdc:,.0f} / {usdc_dai_cap/1000000:,}MM ({dai_from_usdc/usdc_dai_cap*100:.0f}%)
+> :sai:: {total_sai:,.0f} / {sai_cap/1000000:,}MM ({total_sai/sai_cap*100:.0f}%) | [Check out more details on Makerburn]({MKR_BURN_URL})'''
 
 def dsr_overview():
 
@@ -70,8 +70,8 @@ def dsr_overview():
     total_dai = dsr['dai_total']
 
     return f'''
-:dai: Savings Rate: {dsr_apr}% | :dai: in DSR: {dai_in_dsr:,.0f}
-DSR Utilization: {dai_in_dsr/total_dai*100:.2f}% | Total :dai:: {total_dai:,.0f}
+> :dai: Savings Rate: {dsr_apr}% | :dai: in DSR: {dai_in_dsr:,.0f}
+> DSR Utilization: {dai_in_dsr/total_dai*100:.2f}% | Total :dai:: {total_dai:,.0f}
 '''
 
-print(system_overview())
+# print(system_overview())

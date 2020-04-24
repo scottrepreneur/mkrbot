@@ -1,6 +1,6 @@
 
 import os
-from api import RocketChatAPI
+from rocketapi import RocketChatAPI
 
 env = os.getenv('ENVIRONMENT')
 

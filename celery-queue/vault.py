@@ -4,8 +4,16 @@ import json
 from datetime import datetime
 from dateutil.parser import parse
 import requests
+from gql import gql, Client
+from gql.transport.requests import RequestsHTTPTransport
+import web3
 
 MCD_VAULT_URL = os.getenv('MCD_VAULT_URL')
+MCD_VAULTS_SUBGRAPH = 'https://api.thegraph.com/subgraphs/name/graphitetools/maker'
+NOMICS_API_KEY = os.getenv('NOMICS_API_KEY')
+NOMICS_BASE_URL = 'https://api.nomics.com/v1/'
+BURNED_URL = os.getenv('BURNED_URL')
+EXPLORE_URL = os.getenv('EXPLORE_URL')
 
 def get_vault_by_id(message):
 
@@ -13,8 +21,6 @@ def get_vault_by_id(message):
     response = requests.get(f'{MCD_VAULT_URL}/api/cdps/{vault_id}')
     actions = requests.get(f'{MCD_VAULT_URL}/api/cdps/{vault_id}/events')
 
-    print(response.json())
-    print(actions.json())
     data = response.json()
 
     vault_link = f"https://defiexplore.com/cdp/{vault_id}"
@@ -53,7 +59,7 @@ def get_vault_by_id(message):
                 last_action = action
 
             else:
-                print(f"current: {action['blockNum']} and last: {last_action['blockNum']}")
+                # print(f"current: {action['blockNum']} and last: {last_action['blockNum']}")
                 if action['blockNum'] > last_action['blockNum']:
                     last_action = action
     else:
@@ -83,11 +89,206 @@ def get_vault_by_id(message):
             amount = abs(float(action['debt']))
             vault_string = vault_string + f'> Paid back {amount:,.2f} :dai: on {time}\n'
 
+        elif last_action['actionType'] == 'boost':
+            vault_string = vault_string + f'> Boosted: Vault at {last_action["afterCDP"]["collateral"]} {last_action["type"]} and {last_action["afterCDP"]["debt"]} Dai\n'
+
+        elif last_action['actionType'] == 'repay':
+            vault_string = vault_string + f'> Repaid: Vault at {last_action["afterCDP"]["collateral"]} {last_action["type"]} and {last_action["afterCDP"]["debt"]} Dai\n'
+
         else:
-            vault_string = vault_string + f'> Last Action: {action["action-type"]} on {time}\n'
+            vault_string = vault_string + f'> Last Action: {action["actionType"]} on {time}\n'
 
     # add owner
     vault_string = vault_string + f"> Owner: {data['userAddr']}"
         
     return vault_string
+
+def get_vaults_by_collateral_query(collateral_type):
+
+    _transport = RequestsHTTPTransport(
+        url=MCD_VAULTS_SUBGRAPH,
+        use_json=True,
+    )
+
+    client = Client(
+        transport=_transport,
+        fetch_schema_from_transport=True,)
+
+    vaults_query = gql("""
+        query vaultsOverviewQuery($collateral: String!, $batch: Int!, $increment: Int!) {
+            vaults(where: {collateral: $collateral}, first: $batch, skip: $increment) {
+                id
+                cdp {
+                    id
+                }
+                debt
+                supply
+                }
+            }
+        """)
     
+    vaults = []
+
+    i = 0
+    while i < 10:
+        batch = 1000
+        increment = i * batch
+        
+        params = {
+            "collateral": collateral_type,
+            "batch": batch,
+            "increment": increment
+        }
+
+        vaults_response = client.execute(vaults_query, params)['vaults']
+
+        if len(vaults_response) == 0:
+            break; 
+        else:
+            if len(vaults) == 0:
+                vaults = vaults_response
+            else:
+                vaults.extend(vaults_response)
+        
+        i = i + 1
+
+    return vaults
+
+# print(get_vaults_query("ETH-A"))
+
+def collateral_vaults_overview(collateral):
+
+    vaults = 0
+    vaults_with_debt = 0
+    locked = 0
+    debt = 0
+
+    vaults_query = get_vaults_by_collateral_query(collateral)
+     
+    for vault in vaults_query:
+        vaults = vaults + 1
+
+        if float(vault['debt']) > 0:
+            vaults_with_debt = vaults_with_debt + 1
+            debt = debt + float(vault['debt']) / 10 ** 18
+
+        if float(vault['supply']) > 0:
+            locked = locked + float(vault['supply']) / 10 ** 18
+
+    _collateral = collateral.split('-')[0]
+
+    data = requests.get(f"{NOMICS_BASE_URL}currencies/ticker?key={NOMICS_API_KEY}&ids={_collateral}&interval=1d,30d&convert=USD")
+    supply = float(data.json()[0]['circulating_supply'])
+
+    burned = requests.get(BURNED_URL).json()
+    dai_cap = burned[f'mcd_dai_cap_{_collateral.lower()}']
+    apr = (burned[f'mcd_fee_{_collateral.lower()}'] ** (60 * 60 * 24 * 365) - 1) * 100
+
+    prices = requests.get(f'{EXPLORE_URL}/api/stats/globalInfo').json()
+    price = float(prices[f'{_collateral.lower()}FuturePrice'])
+
+    return f"""
+:{_collateral.lower()}: Vaults: {vaults:,.0f} | Locked: {locked:,.1f} | % Locked: {locked / supply * 100:.1f}%
+Vaults with Debt: {vaults_with_debt:,.0f} ({vaults_with_debt / vaults * 100:.0f}%) | Collateralization Ratio: {(debt / (price * locked)) * 1000:.1f}%
+Total Debt: {debt:,.0f} Dai | Mean Debt: {debt / vaults_with_debt:,.1f} Dai
+Debt Ceiling: {dai_cap:,.0f} | Stability Fee: {apr:.1f}%
+"""
+
+# print(collateral_vaults_overview("BAT-A"))
+
+def bat_vaults_overview():
+    return collateral_vaults_overview("BAT-A")
+
+def eth_vaults_overview():
+    return collateral_vaults_overview("ETH-A")
+
+def usdc_vaults_overview():
+    return collateral_vaults_overview("USDC-A")
+
+def get_all_vaults_query():
+    _transport = RequestsHTTPTransport(
+        url=MCD_VAULTS_SUBGRAPH,
+        use_json=True,
+    )
+
+    client = Client(
+        transport=_transport,
+        fetch_schema_from_transport=True,)
+
+    all_vaults_query = gql("""
+        query vaultsOverviewQuery($batch: Int!, $increment: Int!) {
+            vaults(first: $batch, skip: $increment) {
+                id
+                cdp {
+                    id
+                }
+                debt
+                supply
+                }
+            }
+        """)
+    
+    vaults = []
+
+    i = 0
+    while i < 10:
+        batch = 1000
+        increment = i * batch
+        
+        params = {
+            "batch": batch,
+            "increment": increment
+        }
+
+        vaults_response = client.execute(all_vaults_query, params)['vaults']
+
+        if len(vaults_response) == 0:
+            break; 
+        else:
+            if len(vaults) == 0:
+                vaults = vaults_response
+            else:
+                vaults.extend(vaults_response)
+        
+        i = i + 1
+
+    return vaults
+
+
+def all_vaults_overview(collateral):
+
+    vaults = 0
+    vaults_with_debt = 0
+    locked = 0
+    debt = 0
+
+    vaults_query = get_all_vaults_query(collateral)
+     
+    for vault in vaults_query:
+        vaults = vaults + 1
+
+        if float(vault['debt']) > 0:
+            vaults_with_debt = vaults_with_debt + 1
+            debt = debt + float(vault['debt']) / 10 ** 18
+
+        if float(vault['supply']) > 0:
+            locked = locked + float(vault['supply']) / 10 ** 18
+
+    _collateral = collateral.split('-')[0]
+
+    data = requests.get(f"{NOMICS_BASE_URL}currencies/ticker?key={NOMICS_API_KEY}&ids={_collateral}&interval=1d,30d&convert=USD")
+    supply = float(data.json()[0]['circulating_supply'])
+
+    burned = requests.get(BURNED_URL).json()
+    dai_cap = burned[f'mcd_dai_cap_{_collateral.lower()}']
+    apr = (burned[f'mcd_fee_{_collateral.lower()}'] ** (60 * 60 * 24 * 365) - 1) * 100
+
+    prices = requests.get(f'{EXPLORE_URL}/api/stats/globalInfo').json()
+    price = float(prices[f'{_collateral.lower()}FuturePrice'])
+
+    return f"""
+:{_collateral.lower()}: Vaults: {vaults:,.0f} | Locked: {locked:,.1f} | % Locked: {locked / supply * 100:.1f}%
+Vaults with Debt: {vaults_with_debt:,.0f} ({vaults_with_debt / vaults * 100:.0f}%) | Collateralization Ratio: {(debt / (price * locked)) * 1000:.1f}%
+Total Debt: {debt:,.0f} Dai | Mean Debt: {debt / vaults_with_debt:,.1f} Dai
+Debt Ceiling: {dai_cap:,.0f} | Stability Fee: {apr:.1f}%
+"""
