@@ -5,11 +5,17 @@ from flask import Flask, request, jsonify
 from flask import url_for
 from worker import celery
 import celery.states as states
-
-app = Flask(__name__)
+from flask_apscheduler import APScheduler
 
 MKRBOT_TOKEN = os.getenv('MKRBOT_TOKEN')
 MKRBOT_DM_TOKEN = os.getenv('MKRBOT_DM_TOKEN')
+
+app = Flask(__name__)
+
+class Config(object):
+    SCHEDULER_API_ENABLED = True
+
+scheduler = APScheduler()
 
 @app.route('/add/<int:param1>/<int:param2>')
 def add(param1: int, param2: int) -> str:
@@ -86,3 +92,22 @@ def forum_updates():
 
 	else:
 		return jsonify({'status': 'try GET or POST}'}), 200
+
+@scheduler.task('cron', id='schedule_price_update', hour='*')
+def schedule_price_update():
+    celery.send_task('tasks.scheduled_price_update')
+
+@scheduler.task('cron', id='check_new_spell_task', minute='*/15')
+def check_new_spell_task():
+    celery.send_task('tasks.check_new_spell_task')
+
+@scheduler.task('cron', id='check_cast_spell_task', minute='*/15')
+def check_cast_spell_task():
+    celery.send_task('tasks.check_cast_spell_task')
+
+@scheduler.task('cron', id='check_new_poll_task', minute='*/15')
+def check_new_poll_task():
+    celery.send_task('tasks.check_new_poll_task')
+
+scheduler.init_app(app)
+scheduler.start()

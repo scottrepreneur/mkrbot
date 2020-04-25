@@ -191,18 +191,18 @@ def collateral_vaults_overview(collateral):
 :{_collateral.lower()}: Vaults: {vaults:,.0f} | Locked: {locked:,.1f} | % Locked: {locked / supply * 100:.1f}%
 Vaults with Debt: {vaults_with_debt:,.0f} ({vaults_with_debt / vaults * 100:.0f}%) | Collateralization Ratio: {(debt / (price * locked)) * 1000:.1f}%
 Total Debt: {debt:,.0f} Dai | Mean Debt: {debt / vaults_with_debt:,.1f} Dai
-Debt Ceiling: {dai_cap:,.0f} | Stability Fee: {apr:.1f}%
+Debt Ceiling: {dai_cap:,.0f} ({debt / dai_cap * 100:,.0f}%) | Stability Fee: {apr:.1f}%
 """
 
 # print(collateral_vaults_overview("BAT-A"))
 
-def bat_vaults_overview():
+def bat_vaults():
     return collateral_vaults_overview("BAT-A")
 
-def eth_vaults_overview():
+def eth_vaults():
     return collateral_vaults_overview("ETH-A")
 
-def usdc_vaults_overview():
+def usdc_vaults():
     return collateral_vaults_overview("USDC-A")
 
 def get_all_vaults_query():
@@ -220,6 +220,9 @@ def get_all_vaults_query():
             vaults(first: $batch, skip: $increment) {
                 id
                 cdp {
+                    id
+                }
+                collateral {
                     id
                 }
                 debt
@@ -255,14 +258,16 @@ def get_all_vaults_query():
     return vaults
 
 
-def all_vaults_overview(collateral):
+def vaults_overview():
 
     vaults = 0
     vaults_with_debt = 0
-    locked = 0
+    eth_locked = 0
+    bat_locked = 0
+    usdc_locked = 0
     debt = 0
 
-    vaults_query = get_all_vaults_query(collateral)
+    vaults_query = get_all_vaults_query()
      
     for vault in vaults_query:
         vaults = vaults + 1
@@ -272,23 +277,25 @@ def all_vaults_overview(collateral):
             debt = debt + float(vault['debt']) / 10 ** 18
 
         if float(vault['supply']) > 0:
-            locked = locked + float(vault['supply']) / 10 ** 18
-
-    _collateral = collateral.split('-')[0]
-
-    data = requests.get(f"{NOMICS_BASE_URL}currencies/ticker?key={NOMICS_API_KEY}&ids={_collateral}&interval=1d,30d&convert=USD")
-    supply = float(data.json()[0]['circulating_supply'])
+            if vault['collateral']['id'] == 'ETH-A':
+                eth_locked = eth_locked + float(vault['supply']) / 10 ** 18
+            elif vault['collateral']['id'] == 'BAT-A':
+                bat_locked = bat_locked + float(vault['supply']) / 10 ** 18
+            elif vault['collateral']['id'] == 'USDC-A':
+                usdc_locked = usdc_locked + float(vault['supply']) / 10 ** 18
 
     burned = requests.get(BURNED_URL).json()
-    dai_cap = burned[f'mcd_dai_cap_{_collateral.lower()}']
-    apr = (burned[f'mcd_fee_{_collateral.lower()}'] ** (60 * 60 * 24 * 365) - 1) * 100
+    dai_cap = burned[f'dai_cap']
 
     prices = requests.get(f'{EXPLORE_URL}/api/stats/globalInfo').json()
-    price = float(prices[f'{_collateral.lower()}FuturePrice'])
+    eth_price = float(prices[f'ethFuturePrice'])
+    bat_price = float(prices[f'batFuturePrice'])
+    usdc_price = float(prices[f'usdcFuturePrice'])
+
+    locked_value = eth_locked * eth_price + bat_locked * bat_price + usdc_price * usdc_locked
 
     return f"""
-:{_collateral.lower()}: Vaults: {vaults:,.0f} | Locked: {locked:,.1f} | % Locked: {locked / supply * 100:.1f}%
-Vaults with Debt: {vaults_with_debt:,.0f} ({vaults_with_debt / vaults * 100:.0f}%) | Collateralization Ratio: {(debt / (price * locked)) * 1000:.1f}%
-Total Debt: {debt:,.0f} Dai | Mean Debt: {debt / vaults_with_debt:,.1f} Dai
-Debt Ceiling: {dai_cap:,.0f} | Stability Fee: {apr:.1f}%
+Vaults: {vaults:,.0f} | Vaults with Debt: {vaults_with_debt:,.0f} ({vaults_with_debt / vaults * 100:.0f}%)
+Total Debt: {debt:,.0f} Dai | Debt Ceiling: {dai_cap:,.0f} Dai ({debt / dai_cap * 100:,.0f}%) 
+Collateralization Ratio: {(debt / locked_value) * 1000:.1f}%
 """

@@ -9,9 +9,9 @@ from responses import mkrbot_responses
 from cdp import get_cdp_by_id
 from dai import dai_supply, dsr_overview, system_overview
 from mkr import mkr_burned, stability_fees
-from mkrgov import print_spells, mkrgov_domain
+from mkrgov import print_spells, mkrgov_domain, governance_overview
 from prices import price_overview, eth_price, bat_price, usdc_price
-from vault import get_vault_by_id
+from vault import get_vault_by_id, eth_vaults, bat_vaults, usdc_vaults, vaults_overview
 
 ENVIRONMENT = os.getenv('ENVIRONMENT')
 
@@ -115,6 +115,31 @@ def mkrbot_message(user, message, channel):
                                 command_found = True
                                 bot_response(user, system_overview(), channel, False)
 
+                        elif query == 'eth_vaults':
+                            if message.casefold() == sub.casefold():
+                                command_found = True
+                                bot_response(user, eth_vaults(), channel, False)
+
+                        elif query == 'bat_vaults':
+                            if message.casefold() == sub.casefold():
+                                command_found = True
+                                bot_response(user, bat_vaults(), channel, False)
+                        
+                        elif query == 'usdc_vaults':
+                            if message.casefold() == sub.casefold():
+                                command_found = True
+                                bot_response(user, usdc_vaults(), channel, False)
+                            
+                        elif query == 'vaults_overview':
+                            if message.casefold() == sub.casefold():
+                                command_found = True
+                                bot_response(user, vaults_overview(), channel, False)
+
+                        elif query == 'governance_overview':
+                            if message.casefold() == sub.casefold():
+                                command_found = True
+                                bot_response(user, governance_overview(), channel, False)
+        
         
         # don't send two commands
         if command_found:

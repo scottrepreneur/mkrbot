@@ -76,10 +76,38 @@ mkrbot_triggers = {
         ],
         'system_overview': [
             'dss',
+            'overview',
             'dss overview',
             'system overview',
             'dai overview',
             'maker overview'
+        ],
+        'eth_vaults': [
+            'eth vaults',
+            'vaults eth'
+        ],
+        'bat_vaults': [
+            'bat vaults',
+            'vaults bat'
+        ],
+        'usdc_vaults': [
+            'usdc vaults',
+            'vaults usdc'
+        ],
+        'vaults_overview': [
+            'vaults',
+            'cdps',
+            'vault overview',
+            'cdp overview',
+            'vaults overview',
+            'cdps overview'
+        ],
+        'governance_overview': [
+            'gov',
+            'governance',
+            'votes',
+            'gov overview',
+            'governance overview'
         ]
     },
     'query_help': {

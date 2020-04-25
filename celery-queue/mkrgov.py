@@ -32,7 +32,25 @@ polls_query = '''
         votesCount
     }
 }
-
+'''
+governance_overview_query = '''
+{
+    governanceInfo(id: "0x0") {
+        id
+        countProxies
+        countAddresses
+        countSlates
+        countCasted
+        countSpells
+        countLock
+        countFree
+        countPolls
+        locked
+        lastBlock
+        lastSynced
+        hat
+    }
+}
 '''
 
 def get_spells():
@@ -95,6 +113,21 @@ def set_hat(spells):
     spells[index_of_hat]['hat'] = True
 
     return spells
+
+def get_hat(spells):
+    index_of_hat = 0
+    index_of_prev_hat = 0
+    hat = {}
+    for index, spell in enumerate(spells):
+        if index == 0:
+            index_of_hat = 0
+            hat = spell
+        else:
+            if float(spell['approvals']) > float(hat['approvals']):
+                index_of_hat = index
+                hat = spell
+
+    return hat
 
 def set_active(spells):
     for spell in spells:
@@ -168,3 +201,18 @@ def print_spells():
     message = message + f"[Executive Votes on mkrgov.science]({mkrgov_domain + 'executive'})"
 
     return message
+
+
+def governance_overview():
+    response = requests.post(subgraph_api, json={'query': governance_overview_query})
+
+    data = response.json()['data']['governanceInfo']
+    hat = get_hat(get_spells())
+
+    gov_message =  f'''
+Governance Polls: {data['countPolls']} | Governing Proposal: [{hat['title']}]({hat['link']}) 
+Executive Votes: {data['countSpells']} | Votes Passed: {data['countCasted']}
+:mkr: Locked: {float(data['locked']):,.1f} | Voters: {data['countAddresses']}
+'''
+
+    return gov_message
