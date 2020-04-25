@@ -33,22 +33,22 @@ def get_cdp_by_id(message):
     if cup['ratio'] == '0' or cup['ratio'] == 0 or cup['ratio'] == None:
         cdp_string = cdp_string + '> Collateralization Ratio: 0%\n'
     else:
-        ratio = str(round(float(cup['ratio']),2))
-        cdp_string = cdp_string + f'> Collateralization Ratio: {ratio}%\n'
+        ratio = float(cup['ratio'])
+        cdp_string = cdp_string + f'> Collateralization Ratio: {ratio:.0f}%\n'
     
     # add outstanding dai
     if cup['art'] == '0' or cup['art'] == 0 or cup['art'] == None:
         cdp_string = cdp_string + '> Drawn: 0 :dai: | '
     else:
-        art = str(round(float(cup['art']),2))
+        art = float(cup['art'])
         cdp_string = cdp_string + f'> Drawn: {art:,.2f} :dai: | '
 
     # add collateral locked
     if cup['ink'] == '0' or cup['ink'] == 0 or cup['ink'] == None:
         cdp_string = cdp_string + 'Collateral: 0 :eth: (~$0)\n'
     else:
-        ink = str(round(float(cup['ink']),2))
-        ink_usd = str(round(float(cup['ink']) * float(cup['pip']),2))
+        ink = float(cup['ink'])
+        ink_usd = ink * float(cup['pip'])
         cdp_string = cdp_string + f'Collateral: {ink:,.2f} :eth: (~${ink_usd:,.0f})\n'
     
     # add last action
@@ -62,11 +62,11 @@ def get_cdp_by_id(message):
             cdp_string = cdp_string + f'> Last Action: {action_name} at {time}\n'
 
         elif action['act'] == 'LOCK' or action['act'] == 'FREE':
-            amount = str(round(float(action['arg']),2))
+            amount = float(action['arg'])
             cdp_string = cdp_string + f'> Last Action: {action_name} {amount:,.0f} :eth: at {time}\n'
 
         elif action['act'] == 'DRAW' or action['act'] == 'WIPE':
-            amount = str(round(float(action['arg']),2))
+            amount = float(action['arg'])
             cdp_string = cdp_string + f'> Last Action: {action_name} {amount:,.0f} :dai: at {time}\n'
 
         break
