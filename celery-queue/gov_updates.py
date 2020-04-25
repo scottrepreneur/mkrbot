@@ -10,24 +10,16 @@ def check_new_spell():
     with open('./spells.json') as json_file:
         spells_data = json.load(json_file)
 
-    # print(spells_data)
     # spells query
     spells_query_data = get_spells()
-    print(spells_query_data)
 
     # remove spells in file
     for _spell in spells_data:
-        print(f"match spell {_spell['id']}")
 
         for ind, spell in enumerate(spells_query_data):
-            # if spell['id'] == '0x049e4d10c1b7280cfed5b0d990e39f9c54529a32':
-            print(f"{spell['id']}")
-            # print(spell)
             if spell['id'].lower() == _spell['id'].lower():
                 del(spells_query_data[ind])
                 break
-
-    print(spells_query_data)
 
     # print outstanding spell
     if len(spells_query_data) > 0:
@@ -97,18 +89,11 @@ def check_new_poll():
 
     # remove polls in file
     for poll in polls_data:
-        print(f"match poll {poll['pollId']}")
 
         for ind, _poll in enumerate(polls_query_data):
-            # if spell['id'] == '0x049e4d10c1b7280cfed5b0d990e39f9c54529a32':
-            print(f"{_poll['pollId']}")
-            # print(spell)
             if int(poll['pollId']) == int(_poll['pollId']):
                 del(polls_query_data[ind])
                 break
-
-    # output new poll
-    print(polls_query_data)
 
     # print outstanding spell
     if len(polls_query_data) > 0:
