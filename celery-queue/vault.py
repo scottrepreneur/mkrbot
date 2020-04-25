@@ -90,10 +90,10 @@ def get_vault_by_id(message):
             vault_string = vault_string + f'> Paid back {amount:,.2f} :dai: on {time}\n'
 
         elif last_action['actionType'] == 'boost':
-            vault_string = vault_string + f'> Boosted: Vault at {last_action["afterCDP"]["collateral"]} {last_action["type"]} and {last_action["afterCDP"]["debt"]} Dai\n'
+            vault_string = vault_string + f'> Boosted Vault to {float(last_action["afterCDP"]["collateral"]):,.1f} {last_action["type"]} and {float(last_action["afterCDP"]["debt"]):,.1f} Dai\n'
 
         elif last_action['actionType'] == 'repay':
-            vault_string = vault_string + f'> Repaid: Vault at {last_action["afterCDP"]["collateral"]} {last_action["type"]} and {last_action["afterCDP"]["debt"]} Dai\n'
+            vault_string = vault_string + f'> Repaid Vault to {float(last_action["afterCDP"]["collateral"]):,.1f} {last_action["type"]} and {float(last_action["afterCDP"]["debt"]):,.1f} Dai\n'
 
         else:
             vault_string = vault_string + f'> Last Action: {action["actionType"]} on {time}\n'

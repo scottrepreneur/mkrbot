@@ -33,7 +33,7 @@ def check_new_spell():
     if len(spells_query_data) > 0:
         for spell in spells_query_data:
             new_spell_message = f'''
-New Spell: [{spell['title']}]({mkrgov_domain + 'executive/' + spell['id']}) [Vote Now!]({voting_dashboard}) :wiz:
+New Spell: [{spell['title']}]({mkrgov_domain + 'executive/' + spell['id']}) :wiz: [Vote Now!]({voting_dashboard})
 '''
 
             bot_response('user', new_spell_message, 'chakachat', False)
@@ -75,7 +75,7 @@ def check_cast_spell():
                         spell['lifted'] = _spell['lifted']
 
                         spell_cast_message = f'''
-[{spell['title'] or spell['id']}]({mkrgov_domain}executive/{spell['id']}) was cast on {time.strftime("%d/%m/%Y at %H:%M", time.gmtime(int(spell['casted'])))} UTC. was cast! [You can still help secure the governance system]({voting_dashboard})
+[{spell['title'] or spell['id']}]({mkrgov_domain}executive/{spell['id']}) was cast on {time.strftime("%d/%m/%Y at %H:%M", time.gmtime(int(spell['casted'])))} UTC. was cast! | [You can still help secure the governance system]({voting_dashboard})
 '''
 
                         # output spell
@@ -116,7 +116,7 @@ def check_new_poll():
             poll_title = get_poll_title(poll)
 
             new_poll_message = f'''
-New Governance Poll: [{poll_title}]({mkrgov_domain + 'poll/' + poll['pollId']}). [Vote Now!]({voting_dashboard}) :clipboard:
+New Governance Poll: [{poll_title}]({mkrgov_domain + 'poll/' + poll['pollId']}). :clipboard: [Vote Now!]({voting_dashboard})
 '''
             # print(new_poll_message)
             bot_response('user', new_poll_message, 'chakachat', False)

@@ -21,4 +21,4 @@ EXPOSE 5000
 RUN pip install gunicorn==19.9.0
 
 # run the app server
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "3", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "3", "app:app", "--preload"]

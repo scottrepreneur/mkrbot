@@ -11,7 +11,6 @@ MKRBOT_TOKEN = os.getenv('MKRBOT_TOKEN')
 MKRBOT_DM_TOKEN = os.getenv('MKRBOT_DM_TOKEN')
 
 app = Flask(__name__)
-
 class Config(object):
     SCHEDULER_API_ENABLED = True
 
@@ -109,5 +108,12 @@ def check_cast_spell_task():
 def check_new_poll_task():
     celery.send_task('tasks.check_new_poll_task')
 
-scheduler.init_app(app)
 scheduler.start()
+
+if __name__ == '__main__':
+	app.config.from_object(Config())
+
+	scheduler.init_app(app)
+	scheduler.start()
+
+	app.run(debug=True, use_reloader=False)
