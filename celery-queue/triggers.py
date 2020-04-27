@@ -817,8 +817,6 @@ mkrbot_triggers = {
             'trade'
         ],
         'governance_dashboard': [
-            'governance',
-            'gov',
             'vote',
             'gov dashboard',
             'governance dashboard',

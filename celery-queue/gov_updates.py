@@ -67,7 +67,8 @@ def check_cast_spell():
                         spell['lifted'] = _spell['lifted']
 
                         spell_cast_message = f'''
-[{spell['title'] or spell['id']}]({mkrgov_domain}executive/{spell['id']}) was cast on {time.strftime("%d/%m/%Y at %H:%M", time.gmtime(int(spell['casted'])))} UTC. was cast! | [You can still help secure the governance system]({voting_dashboard})
+[{spell['title'] or spell['id']}]({mkrgov_domain}executive/{spell['id']}) was cast on {time.strftime("%d/%m/%Y at %H:%M", time.gmtime(int(spell['casted'])))} UTC.
+[You can still help secure the governance system]({voting_dashboard})
 '''
 
                         # output spell

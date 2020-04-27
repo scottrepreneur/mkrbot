@@ -176,7 +176,7 @@ def collateral_vaults_overview(collateral):
             locked = locked + float(vault['supply']) / 10 ** 18
 
     _collateral = collateral.split('-')[0]
-
+    
     data = requests.get(f"{NOMICS_BASE_URL}currencies/ticker?key={NOMICS_API_KEY}&ids={_collateral}&interval=1d,30d&convert=USD")
     supply = float(data.json()[0]['circulating_supply'])
 
@@ -186,6 +186,9 @@ def collateral_vaults_overview(collateral):
 
     prices = requests.get(f'{EXPLORE_URL}/api/stats/globalInfo').json()
     price = float(prices[f'{_collateral.lower()}FuturePrice'])
+
+    if _collateral == 'BAT' or _collateral == 'bat':
+        _collateral = 'battoken'
 
     return f"""
 :{_collateral.lower()}: Vaults: {vaults:,.0f} | Locked: {locked:,.1f} | % Locked: {locked / supply * 100:.1f}%

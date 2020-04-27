@@ -6,7 +6,7 @@ from celery.schedules import crontab
 from rocket import approved_channels, channels
 from mkrbot import mkrbot_names, mkrbot_triggers, mkrbot_message, bot_response
 from reddit import forum_cross_post
-from prices import price_overview
+from prices import price_update
 from gov_updates import check_new_spell, check_cast_spell, check_new_poll
 
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379'),
@@ -16,7 +16,7 @@ celery = Celery('tasks', broker=CELERY_BROKER_URL, backend=CELERY_RESULT_BACKEND
 
 @celery.task(name='tasks.scheduled_price_update', bind=True)
 def scheduled_price_update(self):
-    bot_response('user', price_overview(), channels['chakachat'], False)
+    bot_response('user', price_update(), channels['chakachat'], False)
 
 @celery.task(name='tasks.check_new_spell_task', bind=True)
 def check_new_spell_task(self):

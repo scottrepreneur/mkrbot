@@ -21,6 +21,17 @@ def price_overview():
 > :mkr: Next: [Pending] | Current: [Pending]
 '''
 
+def price_update():
+    prices = requests.get(f'{EXPLORE_URL}/api/stats/globalInfo').json()
+
+    next_eth_price = float(prices['ethFuturePrice'])
+    next_bat_price = float(prices['batFuturePrice'])
+    next_usdc_price = float(prices['usdcFuturePrice'])
+
+    return f'''
+:eth:: ${next_eth_price:.2f} | :battoken:: ${next_bat_price:.2f} | :usdc:: ${next_usdc_price:.2f} | :dai:: [Pending] | :mkr:: [Pending]
+'''
+
 def eth_price():
 
     prices = requests.get(f'{EXPLORE_URL}/api/stats/globalInfo').json()
