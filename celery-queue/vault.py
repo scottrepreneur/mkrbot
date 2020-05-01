@@ -34,7 +34,7 @@ def get_vault_by_id(message):
     if data['liqPrice'] == '0' or data['liqPrice'] == 0 or data['liqPrice'] == None:
         vault_string = vault_string + 'Liquidation Price: $0\n'
     else:
-        vault_string = vault_string + f'Liquidation Price: ${float(data["liqPrice"])*100:,.2f}\n'
+        vault_string = vault_string + f'Liquidation Price: ${float(data["liqPrice"]):,.2f}\n'
     
     # add outstanding dai
     if data['debt'] == '0' or data['debt'] == 0 or data['debt'] == None:
