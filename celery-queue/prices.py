@@ -3,6 +3,13 @@ import requests
 
 EXPLORE_URL = os.getenv('EXPLORE_URL')
 
+last_price = {
+    'eth': 0,
+    'bat': 0,
+    'usdc': 0,
+    'wbtc': 0
+}
+
 def price_overview():
 
     prices = requests.get(f'{EXPLORE_URL}/api/stats/globalInfo').json()
@@ -29,7 +36,7 @@ def price_update():
     next_usdc_price = float(prices['usdcFuturePrice'])
 
     return f'''
-:eth:: ${next_eth_price:.2f} | :battoken:: ${next_bat_price:.2f} | :usdc:: ${next_usdc_price:.2f} | :dai:: [Pending] | :mkr:: [Pending]
+:eth:: ${next_eth_price:.2f} | :battoken:: ${next_bat_price:.3f} | :usdc:: ${next_usdc_price:.2f} | :dai:: [Pending] | :mkr:: [Pending]
 '''
 
 def eth_price():
