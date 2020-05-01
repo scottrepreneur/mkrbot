@@ -28,7 +28,7 @@ def check_new_spell():
 New Spell: [{spell['title']}]({mkrgov_domain + 'executive/' + spell['id']}) :wiz: [Vote Now!]({voting_dashboard})
 '''
 
-            bot_response('user', new_spell_message, 'chakachat', False)
+            bot_response('user', new_spell_message, 'governance-and-risk', False)
 
             spells_data.append({
                 "id": spell['id'],
@@ -72,7 +72,7 @@ def check_cast_spell():
 '''
 
                         # output spell
-                        bot_response('user', spell_cast_message, 'chakachat', False)
+                        bot_response('user', spell_cast_message, 'governance-and-risk, False)
 
     # update cast spell in file
     with open('./spells.json', 'w') as outfile:
@@ -105,7 +105,7 @@ def check_new_poll():
 New Governance Poll: [{poll_title}]({mkrgov_domain + 'poll/' + poll['pollId']}). :clipboard: [Vote Now!]({voting_dashboard})
 '''
             # print(new_poll_message)
-            bot_response('user', new_poll_message, 'chakachat', False)
+            bot_response('user', new_poll_message, 'governance-and-risk', False)
 
             polls_data.append({
                 "id": poll['id'],

@@ -16,7 +16,7 @@ celery = Celery('tasks', broker=CELERY_BROKER_URL, backend=CELERY_RESULT_BACKEND
 
 @celery.task(name='tasks.scheduled_price_update', bind=True)
 def scheduled_price_update(self):
-    bot_response('user', price_update(), channels['chakachat'], False)
+    bot_response('user', price_update(), channels['chakachat'], True)
 
 @celery.task(name='tasks.check_new_spell_task', bind=True)
 def check_new_spell_task(self):
