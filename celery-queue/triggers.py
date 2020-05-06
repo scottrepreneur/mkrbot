@@ -677,7 +677,7 @@ mkrbot_triggers = {
             'what is a surplus auction?',
             'surplus auction',
             'what is a surplus auction'
-        ]
+        ],
         'time_based_voting': [
             'what is time-based voting?',
             'time based voting',
