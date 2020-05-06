@@ -49,6 +49,7 @@ Here's all the [FAQs]({MAKER_COMMUNITY_PORTAL}{faqs_url}) you can request
         'burn': PENDING_MESSAGE, # removed from MCD? f'{glossary_url}#burn',
         'burner_address': PENDING_MESSAGE, # removed from MCD? f'{glossary_url}#burner-address',
         'collateral': f'{glossary_url}#collateral',
+        'collateral_auction': f'{glossary_url}#collateral-auction',
         'collateral_claims': f'{glossary_url}#collateral-claims',
         'collateralization_ratio': f'{glossary_url}#collateralization-ratio',
         'continuous_approval_voting': f'{glossary_url}#continuous-approval-voting',
@@ -68,12 +69,14 @@ Here's all the [FAQs]({MAKER_COMMUNITY_PORTAL}{faqs_url}) you can request
         'global_debt_ceiling': f'{glossary_url}#global-debt-ceiling',
         'governance_poll': f'{glossary_url}#governance-poll',
         'governance_portal': f'{glossary_url}#governance-portal',
+        'governance_security_module': f'{glossary_url}#governance-security-module',
         'hat': PENDING_MESSAGE, # f'{glossary_url}#hat',
         'liquidation_penalty': f'{glossary_url}#liquidation-penalty',
         'liquidation_price': f'{glossary_url}#liquidation-price',
         'liquidation_ratio': f'{glossary_url}#liquidation-ratio',
         'lock': PENDING_MESSAGE, # actions removed? f'{glossary_url}#lock',
         'maker_foundation': f'{glossary_url}#maker-foundation',
+        'maker_foundation_interim_risk_team':  f'{glossary_url}#maker-foundation-interim-risk-team',
         'maker_protocol': f'{glossary_url}#maker-protocol',
         'market_maker': f'{glossary_url}#market-maker',
         'mcd': f'{glossary_url}#mcd',
@@ -94,6 +97,7 @@ Here's all the [FAQs]({MAKER_COMMUNITY_PORTAL}{faqs_url}) you can request
         'shut': PENDING_MESSAGE, # actions removed? f'{glossary_url}#shut',
         'soft_peg': f'{glossary_url}#soft-peg',
         'spell': PENDING_MESSAGE, # f'{glossary_url}#spell',
+        'surplus_auction': f'{glossary_url}#surplus-auction',
         'time_based_voting': f'{glossary_url}#time-based-voting',
         'vote_proxy': f'{glossary_url}#vote-proxy-contract',
         'voting_contract': f'{glossary_url}#voting-contract',
@@ -112,7 +116,7 @@ Here's all the [FAQs]({MAKER_COMMUNITY_PORTAL}{faqs_url}) you can request
         'awesome_dev_resoures': f'{AMD_LINK}#developer-resources',
         'awesome_audits_security': f'{AMD_LINK}#audits-and-security',
         'awesome_overview': f'''
-Here are the [AMD]({AMD_LINK}) Resources you can request
+Here are the [AMD Resources]({AMD_LINK}) you can request
 > Official Channels: `amd channels`
 > Spend Dai: `amd spend`
 > Use Dai: `amd use`
@@ -160,19 +164,31 @@ Symbols:
     'lost': {
         'help': f'''
 Hey, I'm @mkr.bot. I can help you find resources or information about the Maker Protocol.
-> *Commands*
-> FAQs: `faqs {{governance | vaults | dai | stability fee}}`
-> Spells Count: `spells`
-> Vault Lookup: `vault {{ID}}`
-> Awesome MakerDAO: `amd {{use | lend dai | spend | watch dai}}`
-[mkr.bot Guide]({MKRBOT_GUIDE_URL}) | [Expand my commands!]({CONTRIBUTING_URL}) | Let [@scottrepreneur]({CREATOR_DM_URL}) know if you have any issues''',
+*Commands*
+> Spells Count: `spells`   | Vault Lookup: `vault {{ID}}`
+> Dai Overview: `dai`      | Collateral Prices: `{{collateral}} price`
+> Stability Fee: `sf`      | DSR Overview: `dsr`
+> MKR burned: `mkr burned` | Governance: `votes`
+> Vaults Overview: `{{collateral_abbreviation}} vaults` just `vaults` for all collateral types
+*Resources*
+> Developer Docs: `docs` | Onboarding Guides: [Pending]
+> FAQs: `faqs {{ governance | vaults | dai | stability fee }}`
+> Glossary: `collateral auction` `price feed delay` `what is a spell?`
+> Awesome MakerDAO: `amd {{ use | lend dai | spend | watch dai }}`
+[Full command list in mkr.bot Guide]({MKRBOT_GUIDE_URL}) | [Expand my commands!]({CONTRIBUTING_URL}) | Let [@scottrepreneur]({CREATOR_DM_URL}) know if you have any issues''',
         'no_commands': f'''
-I didn\'t get you. Let me look up those Maker resources for you.
-> *Commands*
+I didn\'t get you. Let me look up Maker resources for you.
+*Commands*
+> Spells Count: `spells`   | Vault Lookup: `vault {{ID}}`
+> Dai Overview: `dai`      | Collateral Prices: `{{collateral}} price`
+> Stability Fee: `sf`      | DSR Overview: `dsr`
+> MKR burned: `mkr burned` | Governance: `votes`
+> Vaults Overview: `{{collateral_abbreviation}} vaults` just `vaults` for all collateral types
+*Resources*
+> Developer Docs: `docs` | Onboarding Guides: [Pending]
 > FAQs: `faqs {{governance | vaults | dai | stability fee}}`
-> Spells Count: `spells`
-> Vault Lookup: `vault {{ID}}`
+> Glossary: `collateral auction` `price feed delay` `what is a spell?`
 > Awesome MakerDAO: `amd {{use | lend dai | spend | watch dai}}`
-[mkr.bot Guide]({MKRBOT_GUIDE_URL}) | [Expand my commands!]({CONTRIBUTING_URL}) | Let [@scottrepreneur]({CREATOR_DM_URL}) know if you have any issues'''
+[Full command list in mkr.bot Guide]({MKRBOT_GUIDE_URL}) | [Expand my commands!]({CONTRIBUTING_URL}) | Let [@scottrepreneur]({CREATOR_DM_URL}) know if you have any issues'''
     }
 }
