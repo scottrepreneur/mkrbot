@@ -1,11 +1,11 @@
 # Maker Bot
 
-A RocketChat bot for MKR holders and Dai users.
+A RocketChat bot for MKR holders and the Dai community.
 
-- [Docker Compose](https://docs.docker.com/compose/)
 - [Flask](http://flask.pocoo.org/) 
 - [Celery](http://www.celeryproject.org/) 
 - [Redis](https://redis.io/)
+- [Docker Compose](https://docs.docker.com/compose/)
 
 My command list is [available here](https://docs.google.com/spreadsheets/d/1apOxgKIeeCTUnisfSRS0TLxiXsIFFB0xvtYLoxSpYX0/edit#gid=527738112).
 

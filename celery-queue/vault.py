@@ -277,7 +277,7 @@ def vaults_overview():
 
         if float(vault['debt']) > 0:
             vaults_with_debt = vaults_with_debt + 1
-            debt = debt + float(vault['debt']) / 10 ** 18
+            debt = debt + float(vault['debt'])
 
         if float(vault['supply']) > 0:
             if vault['collateral']['id'] == 'ETH-A':

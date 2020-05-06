@@ -2,8 +2,7 @@
 mkrbot_triggers = {
     'queries': {                                #? trigger_group
         'spell_count': [                        #? query
-            'spell',                            #? sub-query/command
-            'spells',
+            'spells',                           #? sub-query/command
             'spell count',
             'spells count',
             'chief spells',
@@ -29,6 +28,9 @@ mkrbot_triggers = {
             'burner',
             'burn',
             'burned',
+            'burned mkr',
+            'mkr burn',
+            'burn mkr'
         ],
         'dai_supply': [
             'dai',
@@ -302,20 +304,16 @@ mkrbot_triggers = {
         ],
         'black_swan': [
             'what is a black swan?',
-            'black swan	black swan event',
+            'black swan',
+            'black swan event',
             'what is a black swan',
             'what is black swan?',
             'what is black swan'
         ],
         'burn': [
             'what happens to burned MKR?',
-            'burned mkr',
-            'burn mkr',
-            'mkr burn',
-            'mkr burned',
             'what happens to burned mkr?',
             'what happens burned mkr?',
-            'what happens to burned mkr',
             'what happens to burned mkr'
         ],
         'burner_address': [
@@ -331,11 +329,21 @@ mkrbot_triggers = {
             'what is a collateral',
             'what is collateral'
         ],
-        'collateral_claim': [
+        'collateral_auction': [
+            'what is a collateral auction?',
+            'collateral auction',
+            'collateral auctions',
+            'what is a collateral auction'
+        ],
+        'collateral_claims': [
             'what is a collateral claim?',
             'collateral claim',
+            'collateral claims',
             'claim collateral',
-            'what is a collateral claim'
+            'claim collaterals',
+            'what is a collateral claim',
+            'what are collateral claims',
+            'what are collateral claims?'
         ],
         'collateralization_ratio': [
             'what is the collateralization ratio?',
@@ -459,6 +467,11 @@ mkrbot_triggers = {
             'what is the governance portal?',
             'what is the governance portal'
         ],
+        'governance_security_module': [
+            'what is the gsm?',
+            'gsm',
+            'governance security module'
+        ],
         'hat': [
             'what is the hat?',
             'hat',
@@ -541,9 +554,12 @@ mkrbot_triggers = {
             'what is multi-collateral dai?',
             'multi collateral dai',
             'multi-collateral dai',
+            'multicollateral dai',
             'what is multi collateral dai?',
             'what is multi-collateral dai',
-            'what is multi collateral dai'
+            'what is multi collateral dai',
+            'what is multicollateral dai',
+            'what is multicollateral dai?'
         ],
         'osm': [
             'what is the osm?',
@@ -657,6 +673,11 @@ mkrbot_triggers = {
             'what is spell?',
             'what is spell'
         ],
+        'surplus_auction': [
+            'what is a surplus auction?',
+            'surplus auction',
+            'what is a surplus auction'
+        ]
         'time_based_voting': [
             'what is time-based voting?',
             'time based voting',
@@ -847,17 +868,31 @@ mkrbot_triggers = {
         'moon': [
             'moon',
             'when moon',
-            'wen moon'
+            'wen moon',
+            'moon?',
+            'when moon?'
         ],
         'number_go_up': [
             'up',
-            'number up'
+            'number up',
+            'number go up'
         ],
         'rick_roll': [
             'rich',
             'rick',
             'roll',
             'roll me baby one more time'
+        ],
+        'feelings': [
+            'what is feelings?',
+            'what is feelings',
+            'what is \'feelings\'?',
+            'what is \'feelings?\''
+        ],
+        'liquidation_price': [
+            'liq',
+            'above price feed',
+            'ever be'
         ]
     },
     'lost': {
