@@ -93,9 +93,9 @@ def forum_updates():
 	else:
 		return jsonify({'status': 'try GET or POST}'}), 200
 
-@scheduler.task('cron', id='schedule_price_update', hour='*')
-def schedule_price_update():
-    celery.send_task('tasks.scheduled_price_update')
+# @scheduler.task('cron', id='schedule_price_update', hour='*')
+# def schedule_price_update():
+#     celery.send_task('tasks.scheduled_price_update')
 
 @scheduler.task('cron', id='check_new_spell_task', minute='*/15')
 def check_new_spell_task():
@@ -105,9 +105,9 @@ def check_new_spell_task():
 def check_cast_spell_task():
     celery.send_task('tasks.check_cast_spell_task')
 
-@scheduler.task('cron', id='check_new_poll_task', minute='*/15')
-def check_new_poll_task():
-    celery.send_task('tasks.check_new_poll_task')
+# @scheduler.task('cron', id='check_new_poll_task', minute='*/15')
+# def check_new_poll_task():
+#     celery.send_task('tasks.check_new_poll_task')
 
 scheduler.init_app(app)
 scheduler.start()
